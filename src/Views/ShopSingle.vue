@@ -29,7 +29,7 @@
     <div class="col-md-6 gallery mb-3 mb-md-0">
 
         <!-- Item -->
-        <a class="d-block gallery-item card-hover zoom-effect mb-4" href="assets/img/shop/single/gallery/01.png">
+        <a class="d-block gallery-item card-hover zoom-effect mb-4" href="../assets/img/shop/single/gallery/01.png">
             <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 rounded-1 overflow-hidden z-2 opacity-0">
                 <i class="ai-zoom-in fs-2 text-white position-relative z-2"></i>
                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-20"></div>

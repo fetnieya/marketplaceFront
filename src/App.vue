@@ -8,11 +8,15 @@
 <script>
 import DefaultLayout from './components/layouts/DefaultLayout.vue';
 import AdminLayout from './components/layouts/AdminLayout.vue';
-
+import SellerLayout from './components/layouts/SellerLayout.vue';
+import AuthLayout from './components/layouts/AuthLayout.vue';
 export default {
   components: {
+
     DefaultLayout,
     AdminLayout,
+    SellerLayout,
+    AuthLayout,
   },
   computed: {
     // Dynamically choose the layout component
@@ -21,10 +25,16 @@ export default {
       const layout = this.$route.meta.layout || 'DefaultLayout';
 
       // Return the appropriate layout component
-      if (layout === 'AdminLayout') {
-        return AdminLayout;
+      switch (layout) {
+        case 'AdminLayout':
+          return AdminLayout;
+        case 'SellerLayout':
+          return SellerLayout;
+        case 'AuthLayout':
+          return AuthLayout;
+        default:
+          return DefaultLayout;
       }
-      return DefaultLayout;
     },
   },
 };

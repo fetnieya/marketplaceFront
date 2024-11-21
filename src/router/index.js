@@ -29,20 +29,17 @@ import CategorySellerList from "../Views/CategorySellerList .vue";
 import AddSellerCategory from '../Views/AddSellerCategory.vue';
 import EditSellerCategory from '../Views/EditSellerCategory .vue';
 import UserComments from '../Views/UserComments.vue';
-
-
-
-
-
+import ResetPassword from '../Views/ResetPassword.vue';
 const routes = [
+    { path: '/sign-in', component: SignIn, meta: { layout: 'AuthLayout' } },
+    { path: '/sign-up', component: SignUp, meta: { layout: 'AuthLayout' } },
+    { path: '/resetPass', component: ResetPassword, meta: { layout: 'AuthLayout' } },
     { path: '/', component: HomeUser, meta: { layout: 'DefaultLayout' } },
     { path: '/catalog', component: Catalog, meta: { layout: 'DefaultLayout' } },
     { path: '/wishlist', component: WishList, meta: { layout: 'DefaultLayout' } },
     { path: '/following-market', component: FollowingMarket, meta: { layout: 'DefaultLayout' } },
     { path: '/shop-single', component: ShopSingle, meta: { layout: 'DefaultLayout' } },
     { path: '/market-page', component: MarketPage, meta: { layout: 'DefaultLayout' } },
-    { path: '/sign-in', component: SignIn, meta: { layout: 'AuthLayout' } },
-    { path: '/sign-up', component: SignUp, meta: { layout: 'AuthLayout' } },
     { path: '/admin', component: AdminDashboard, meta: { layout: 'AdminLayout' } },
     { path: '/seller', component: SellerDashboard, meta: { layout: 'SellerLayout' } },
     { path: '/users', component: UsersList, meta: { layout: 'AdminLayout' } },

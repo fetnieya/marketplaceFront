@@ -4,28 +4,20 @@
         <section>
             <div class="jarallax bg-dark min-vh-100 py-5" data-jarallax data-type="scroll-opacity" data-speed="0.7">
                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-40"></div>
-                <div class="jarallax-img" style="background-image: url(assets/img/landing/shop-1/hero/bg.jpg);"></div>
+                <div class="jarallax-img" style="background-image: url(assets/img/landing/shop-1/hero/bg.jpg);"> </div>
                 <div class="container position-relative z-5 py-sm-4 py-lg-5 mt-4">
 
                     <!-- Text + button -->
                     <div class="row pt-lg-2 py-xl-4 py-xxl-5 mb-md-4 mb-lg-5">
                         <div class="col-md-10 col-lg-9 col-xl-8 col-xxl-7 pt-5 mb-5">
                             <h1 class="display-2 text-light text-uppercase pb-sm-2 pb-md-3">Decor to create comfort at home</h1>
-                            <p class="text-light opacity-70 pb-3 pb-md-4 mb-3" style="max-width: 520px;">On the site you will find all the wonderful decor items from photo frames to tablecloths for the dining table</p><a class="btn btn-outline-light" href="shop-catalog.html">Explore the catalog</a>
+                            <p class="text-light opacity-70 pb-3 pb-md-4 mb-3" style="max-width: 520px;">On the site you will find all the wonderful decor items from photo frames to tablecloths for the dining table</p><router-link class="btn btn-outline-light" to="/catalog">Explore the catalog</router-link>
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="fw-medium text-light text-uppercase">Most Popular</div>
 
-                        <!-- Slider prev/next buttons -->
-                        <div class="d-flex">
-                            <button class="btn btn-prev btn-icon btn-sm btn-outline-light rounded-circle ms-3" type="button" id="popular-prev" aria-label="Prev">
-                  <i class="ai-arrow-left"></i>
-                </button>
-                            <button class="btn btn-next btn-icon btn-sm btn-outline-light rounded-circle ms-3" type="button" id="popular-next" aria-label="Next">
-                  <i class="ai-arrow-right"></i>
-                </button>
-                        </div>
+                     
                     </div>
 
                     <!-- Slider (popular items) -->
@@ -53,7 +45,7 @@
 
                             <!-- Item -->
                             <div class="swiper-slide h-auto">
-                                <a class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="shop-single.html">
+                                <router-link class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" to="/shop-single">
                                     <div class="card-body p-4 px-sm-3 px-md-4">
                                         <div class="d-flex align-items-center">
                                             <img src="../assets/img/landing/shop-1/hero/01.png" width="97" alt="Product">
@@ -63,12 +55,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </router-link>
                             </div>
 
                             <!-- Item -->
                             <div class="swiper-slide h-auto">
-                                <a class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="shop-single.html">
+                                <router-link class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" to="/shop-single">
                                     <div class="card-body p-4 px-sm-3 px-md-4">
                                         <div class="d-flex align-items-center">
                                             <img src="../assets/img/landing/shop-1/hero/02.png" width="97" alt="Product">
@@ -78,12 +70,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </router-link>
                             </div>
 
                             <!-- Item -->
                             <div class="swiper-slide h-auto">
-                                <a class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="shop-single.html">
+                                <router-link class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="/shop-single">
                                     <div class="card-body p-4 px-sm-3 px-md-4">
                                         <div class="d-flex align-items-center">
                                             <img src="../assets/img/landing/shop-1/hero/03.png" width="97" alt="Product">
@@ -93,12 +85,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </router-link>
                             </div>
 
                             <!-- Item -->
                             <div class="swiper-slide h-auto">
-                                <a class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="shop-single.html">
+                                <router-link class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" to="/shop-single">
                                     <div class="card-body p-4 px-sm-3 px-md-4">
                                         <div class="d-flex align-items-center">
                                             <img src="../assets/img/landing/shop-1/hero/04.png" width="97" alt="Product">
@@ -108,23 +100,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </router-link>
                             </div>
 
-                            <!-- Item -->
-                            <div class="swiper-slide h-auto">
-                                <a class="card h-100 border-0 rounded-1 text-decoration-none px-xxl-1" href="shop-single.html">
-                                    <div class="card-body p-4 px-sm-3 px-md-4">
-                                        <div class="d-flex align-items-center">
-                                            <img src="../assets/img/landing/shop-1/hero/05.png" width="97" alt="Product">
-                                            <div class="ps-3 ps-md-4">
-                                                <h3 class="fs-sm mb-2">Scented candle in ceramic shell</h3>
-                                                <p class="fs-sm mb-0">$13.00</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                         
                         </div>
                     </div>
                 </div>
@@ -296,9 +275,9 @@
                             <button class="btn btn-icon btn-sm btn-light bg-light border-0 rounded-circle position-absolute top-0 end-0 mt-3 me-3 z-5 opacity-0" type="button" aria-label="Add to Favorites">
                   <i class="ai-heart fs-xl text-nav"></i>
                 </button>
-                            <a class="d-block p-2 p-xl-4" href="shop-single.html">
+                            <router-link class="d-block p-2 p-xl-4" to="/shop-single">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/02.png" width="226" alt="Product">
-                            </a>
+                            </router-link>
                         </div>
                         <div class="d-flex mb-1">
                             <h3 class="h6 mb-0">
@@ -322,9 +301,9 @@
                             <button class="btn btn-icon btn-sm btn-light bg-light border-0 rounded-circle position-absolute top-0 end-0 mt-3 me-3 z-5 opacity-0" type="button" aria-label="Add to Favorites">
                   <i class="ai-heart fs-xl text-nav"></i>
                 </button>
-                            <a class="d-block p-2 p-xl-4" href="shop-single.html">
+                            <router-link class="d-block p-2 p-xl-4" to="/shop-single">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/03.png" width="226" alt="Product">
-                            </a>
+                            </router-link>
                         </div>
                         <div class="d-flex mb-1">
                             <h3 class="h6 mb-0">
@@ -369,9 +348,9 @@
                             <button class="btn btn-icon btn-sm btn-light bg-light border-0 rounded-circle position-absolute top-0 end-0 mt-3 me-3 z-5 opacity-0" type="button" aria-label="Add to Favorites">
                   <i class="ai-heart fs-xl text-nav"></i>
                 </button>
-                            <a class="d-block p-2 p-xl-4" href="shop-single.html">
+                            <router-link class="d-block p-2 p-xl-4" to="/shop-single">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/09.png" width="226" alt="Product">
-                            </a>
+                            </router-link>
                         </div>
                         <div class="d-flex mb-1">
                             <h3 class="h6 mb-0">

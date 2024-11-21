@@ -426,7 +426,7 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <router-link class="swiper-wrapper" to="ShopSingle">
+                        <router-link class="swiper-wrapper" to="/shop-single">
     <div class="swiper-slide p-2 p-xl-4">
       <img class="d-block mx-auto" src="../assets/img/shop/products/01.png" width="226" alt="Product">
     </div>
@@ -482,11 +482,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/02.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -518,11 +518,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/03.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -575,11 +575,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/04.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -630,11 +630,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/05.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -685,11 +685,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/06.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -720,11 +720,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/07.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -756,11 +756,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/08.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -811,11 +811,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/09.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -847,11 +847,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/10.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -903,11 +903,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/11.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -938,11 +938,11 @@
         <i class="ai-heart fs-xl text-nav"></i>
       </button>
                     <div class="swiper swiper-nav-onhover" data-swiper-options='{"loop": true, "navigation": {"prevEl": ".btn-prev", "nextEl": ".btn-next"}}'>
-                        <a class="swiper-wrapper" href="shop-single.html">
+                        <router-link class="swiper-wrapper" to="/shop-single">
                             <div class="swiper-slide p-2 p-xl-4">
                                 <img class="d-block mx-auto" src="../assets/img/shop/products/12.png" width="226" alt="Product">
                             </div>
-                        </a>
+                        </router-link>
                         <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
           <i class="ai-chevron-left fs-xl text-nav"></i>
         </button>
@@ -1020,6 +1020,7 @@ Filters
 
 </template>
 <script>
+
 export default{
     name:"CatalogComponent"
 }
