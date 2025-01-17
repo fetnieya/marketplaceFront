@@ -32,7 +32,7 @@
                 <!-- User signed in state. Account dropdown on screens > 576px -->
                 <div class="dropdown nav d-none d-sm-block order-lg-3">
                     <a class="nav-link d-flex align-items-center p-0" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="border rounded-circle" src="../assets/img/avatar/01.jpg" width="48" alt="Isabella Bocouse">
+                        <img class="border rounded-circle" src="" width="48" alt="Isabella Bocouse">
                         <div class="ps-2">
                             <div class="fs-xs lh-1 opacity-60">Hello,</div>
                             <div class="fs-sm dropdown-toggle">Isabella</div>

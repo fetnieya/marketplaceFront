@@ -1,5 +1,5 @@
 <template>
-  <component :is="layoutComponent">
+  <component  :is="$route.meta.layout || 'default-layout'">
     <!-- Render the current page inside the chosen layout -->
     <router-view />
   </component>
@@ -37,5 +37,6 @@ export default {
       }
     },
   },
+
 };
 </script>
