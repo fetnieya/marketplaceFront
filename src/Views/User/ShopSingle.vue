@@ -93,75 +93,12 @@
         <div class="d-none d-md-block" style="margin-top: -90px;"></div>
         <div class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0">
             <div class="d-none d-md-block" style="padding-top: 90px;"></div>
-            <div class="d-flex align-items-center pt-3 py-3">
-                <span class="badge bg-danger bg-opacity-10 text-danger d-none d-md-inline-block me-4">Sale</span>
-                <span class="fs-sm">V00273124</span>
-            </div>
+           
             <h1 class="d-none d-md-inline-block pb-1 mb-2">Scented candle</h1>
             <p class="fs-sm mb-4">Find aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiatnulla pariatur neque congue aliqua dolor do amet sint ovar velit.</p>
             <div class="d-none d-md-flex align-items-center pb-3 mb-3">
                 <div class="h3 mb-0 me-3">$14.00</div>
                 <del class="fs-5 fw-medium text-body-secondary">$19.00</del>
-            </div>
-
-            <!-- Color button selector -->
-            <div class="h6">
-                Color:<span class="text-body-secondary fw-normal ms-1" id="colorOption">Gray concrete</span>
-            </div>
-            <div class="d-flex pb-3">
-                <div class="me-2 mb-2">
-                    <input class="btn-check" type="radio" name="color" data-binded-label="colorOption" value="Gray concrete" checked id="color1">
-                    <label class="btn btn-icon btn-sm btn-outline-secondary rounded-circle" for="color1">
-        <span class="d-block bg-size-cover bg-position-center rounded-circle" style="width: 1.5rem; height: 1.5rem; background-color: #c0c0c0; background-image: url(@/assets/img/shop/pattern/marble.jpg);"></span>
-      </label>
-                </div>
-                <div class="me-2 mb-2">
-                    <input class="btn-check" type="radio" name="color" data-binded-label="colorOption" value="Soft beige" id="color2">
-                    <label class="btn btn-icon btn-sm btn-outline-secondary rounded-circle" for="color2">
-        <span class="d-block rounded-circle" style="width: 1.5rem; height: 1.5rem; background-color: #d9c9a1;"></span>
-      </label>
-                </div>
-                <div class="me-2 mb-2">
-                    <input class="btn-check" type="radio" name="color" data-binded-label="colorOption" value="Bluish sky" id="color3">
-                    <label class="btn btn-icon btn-sm btn-outline-secondary rounded-circle" for="color3">
-        <span class="d-block rounded-circle" style="width: 1.5rem; height: 1.5rem; background-color: #a1b7d9;"></span>
-      </label>
-                </div>
-                <div class="me-2 mb-2">
-                    <input class="btn-check" type="radio" name="color" data-binded-label="colorOption" value="Green grass" id="color4">
-                    <label class="btn btn-icon btn-sm btn-outline-secondary rounded-circle" for="color4">
-        <span class="d-block rounded-circle" style="width: 1.5rem; height: 1.5rem; background-color: #74947d;"></span>
-      </label>
-                </div>
-                <div class="me-2 mb-2">
-                    <input class="btn-check" type="radio" name="color" data-binded-label="colorOption" value="Woody brown" id="color5">
-                    <label class="btn btn-icon btn-sm btn-outline-secondary rounded-circle" for="color5">
-        <span class="d-block bg-size-cover bg-position-center rounded-circle" style="width: 1.5rem; height: 1.5rem; background-color: #af8352; background-image: url(@/assets/img/shop/pattern/wood.jpg);"></span>
-      </label>
-                </div>
-            </div>
-
-            <!-- Weight button selector -->
-            <div class="h6">Weight</div>
-            <div class="d-flex">
-                <div class="me-3">
-                    <input class="btn-check" type="radio" name="weight" value="140 g" checked id="weight1">
-                    <label class="btn btn-outline-secondary px-2" for="weight1">
-        <span class="mx-1">140 g</span>
-      </label>
-                </div>
-                <div class="me-3">
-                    <input class="btn-check" type="radio" name="weight" value="260 g" id="weight2">
-                    <label class="btn btn-outline-secondary px-2" for="weight2">
-        <span class="mx-1">260 g</span>
-      </label>
-                </div>
-                <div class="me-3">
-                    <input class="btn-check" type="radio" name="weight" value="440 g" id="weight3">
-                    <label class="btn btn-outline-secondary px-2" for="weight3">
-        <span class="mx-1">440 g</span>
-      </label>
-                </div>
             </div>
 
             <!-- Action buttons -->

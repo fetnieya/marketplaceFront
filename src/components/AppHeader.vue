@@ -46,17 +46,23 @@
   
           <!-- Search + Account + Cart -->
           <div class="nav align-items-center order-lg-3 ms-n1 me-3 me-sm-0">
-            <a class="nav-link fs-4 p-2 mx-sm-1" href="#searchModal" data-bs-toggle="modal" aria-label="Search">
-              <i class="ai-search"></i>
-            </a>
-            <router-link to="/sign-in" class="btn btn-outline-primary btn-sm fs-sm ms-3 mb-4 mb-lg-0 d-none d-lg-inline">
-              <i class="ai-login me-2 ms-n1"></i>
-              Sign in
-            </router-link>
-            <router-link to="/sign-up" class="btn btn-primary btn-sm fs-sm ms-3 mb-4 mb-lg-0 d-none d-lg-inline">
-              <i class="ai-user me-2 ms-n1"></i>
-              Sign up
-            </router-link>
+            <div class="search-container">
+  <input type="text" class="search-input" placeholder="Search...">
+  <button class="search-button">
+    <i class="ai-search"></i>
+  </button>
+</div>
+<router-link to="/sign-in" class="btn btn-outline-primary btn-sm fs-sm ms-3 mb-4 mb-lg-0 d-none d-lg-inline">
+  <i class="ai-login me-2 ms-n1"></i>
+  Sign in
+</router-link>
+<router-link to="/sign-up" class="btn btn-primary btn-sm fs-sm ms-3 mb-4 mb-lg-0 d-none d-lg-inline">
+  <i class="ai-user me-2 ms-n1"></i>
+  Sign up
+</router-link>
+<router-link to="/cart" class="btn btn-link btn-sm fs-sm ms-3 mb-4 mb-lg-0 d-none d-lg-inline p-0 text-dark">
+  <i class="ai-shopping-bag fs-lg"></i>
+</router-link>
           </div>
   
           <!-- Mobile menu toggler (Hamburger) -->
@@ -202,3 +208,51 @@ export default {
   },
 };
 </script>
+<style>
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 0;
+  padding: 0;
+  border: none;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #448c74, #448c74);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.search-container:hover .search-input,
+.search-input:focus {
+  width: 200px;
+  padding: 10px;
+  border-bottom: 2px solid #448c74;
+  margin-right: 10px;
+}
+</style>

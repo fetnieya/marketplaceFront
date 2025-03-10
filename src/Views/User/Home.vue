@@ -481,43 +481,6 @@
             </div>
         </section>
 
-
-        <!-- Gallery with hotsposts -->
-        <section class="container pb-5 mb-lg-4 mb-xl-5">
-            <h2 class="h1 pb-3 mb-lg-4">Ideas for your home</h2>
-            <div class="row pb-2 pb-sm-3 pb-md-4 mb-xxl-2 g-4">
-                <div class="col-md-6">
-                    <div class="hotspots hotspots-alt">
-                        <img class="d-block rounded-1" src="@/assets/img/landing/shop-1/gallery/01.jpg" alt="Image">
-                        <a class="hotspot" style="top: 20%; left: 27%;" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom" data-bs-html="true" data-bs-content='<a href="shop-single.html" class="d-flex text-decoration-none mb-2"><span class="h6 fs-sm mb-0">Bronze floor<br>led lamp</span><i class="ai-chevron-right fs-xl text-dark ms-2"></i></a><span>$185.00</span>'
-                            aria-label="Hotspot">
-                            <div class="hotspot-inner"></div>
-                        </a>
-                        <a class="hotspot" style="top: 14.7%; right: 32.7%;" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom" data-bs-html="true" data-bs-content='<a href="shop-single.html" class="d-flex text-decoration-none mb-2"><span class="h6 fs-sm mb-0">Photo frame<br>Defacto</span><i class="ai-chevron-right fs-xl text-dark ms-2"></i></a><span>$21.00</span>'
-                            aria-label="Hotspot">
-                            <div class="hotspot-inner"></div>
-                        </a>
-                        <a class="hotspot" style="bottom: 41%; left: 34.6%;" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content='<a href="shop-single.html" class="d-flex text-decoration-none mb-2"><span class="h6 fs-sm mb-0">Yellow satin<br>armchair</span><i class="ai-chevron-right fs-xl text-dark ms-2"></i></a><span>$276.00</span>'
-                            aria-label="Hotspot">
-                            <div class="hotspot-inner"></div>
-                        </a>
-                        <a class="hotspot" style="bottom: 24.3%; right: 27.5%;" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content='<a href="shop-single.html" class="d-flex text-decoration-none mb-2"><span class="h6 fs-sm mb-0">Gary concrete<br>table stand</span><i class="ai-chevron-right fs-xl text-dark ms-2"></i></a><span>$35.00</span>'
-                            aria-label="Hotspot">
-                            <div class="hotspot-inner"></div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <img class="d-block rounded-1 mb-4" src="@/assets/img/landing/shop-1/gallery/02.jpg" alt="Image">
-                    <img class="rounded-1" src="@/assets/img/landing/shop-1/gallery/03.jpg" alt="Image">
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <img class="rounded-1" src="@/assets/img/landing/shop-1/gallery/04.jpg" alt="Image">
-                </div>
-            </div>
-        </section>
-
-
         <!-- Banner + Subscription CTA -->
         <section class="container pb-5 mb-lg-4 mb-xl-5">
             <div class="row pb-2 pb-sm-3 pb-md-4 mb-xlx-1">
@@ -602,7 +565,7 @@
                 <div class="row align-items-center g-3 g-lg-4 mb-3 mb-lg-4">
                     <div class="col-sm-6 text-center order-sm-2">
                         <div class="ai-instagram fs-2 text-primary mb-2 mb-md-3 mb-lg-4"></div>
-                        <h2 class="h1 mb-2 mb-sm-0">Follow us<br><a href="#" class="text-primary text-decoration-none">#aroundecor</a></h2>
+                        <h2 class="h1 mb-2 mb-sm-0">Follow us<br><a href="#" class="text-primary text-decoration-none">#around</a></h2>
                     </div>
                     <div class="col-6 col-sm-3 order-sm-1">
                         <a class="d-block card-hover zoom-effect" href="#">
