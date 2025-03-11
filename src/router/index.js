@@ -30,6 +30,7 @@ import AddSellerCategory from '../Views/Seller/SellerCategory/AddSellerCategory.
 import EditSellerCategory from '../Views/Seller/SellerCategory/EditSellerCategory .vue';
 import UserComments from '../Views/Seller/UserComments.vue';
 import ResetPassword from '../Views/Auth/ResetPassword.vue';
+import ShoppingCart from "../Views/User/Cart.vue";
 const routes = [
     { path: '/sign-in', component: SignIn, meta: { layout: 'AuthLayout' } },
     { path: '/sign-up', component: SignUp, meta: { layout: 'AuthLayout' } },
@@ -61,6 +62,7 @@ const routes = [
     { path: '/addSellerCategory', component: AddSellerCategory, meta: { layout: 'SellerLayout' } },
     { path: '/editSellerCategory/:id', component: EditSellerCategory, meta: { layout: 'SellerLayout' } },
     { path: '/comments', component: UserComments, meta: { layout: 'SellerLayout' } },
+    { path: '/cart', component: ShoppingCart, meta: { layout: 'DefaultLayout' } },
 
 ];
 
