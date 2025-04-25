@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <!-- Form card -->
       <div class="card shadow-lg p-4" style="width: 100%; max-width: 600px;">
-        <h1 class="h4 mb-4 text-center">Add Category</h1>
+        <h1 class="h4 mb-4 text-center">Request new Category</h1>
         <form>
           <!-- Text input -->
           <div class="mb-3">
@@ -11,16 +11,10 @@
             <input class="form-control" type="text" id="text-input" placeholder="Artisanal kale">
           </div>
   
-          <!-- Number input -->
-          <div class="mb-3">
-            <label for="number-input" class="form-label">Number of Products</label>
-            <input class="form-control" type="number" id="number-input" placeholder="0">
-          </div>
-  
           <!-- Textarea -->
           <div class="form-floating mb-3">
             <textarea class="form-control" id="fl-textarea" style="height: 120px;" placeholder="Your message"></textarea>
-            <label for="fl-textarea">Add your description please</label>
+            <label for="fl-textarea">Add your category description please</label>
           </div>
   
           <!-- Buttons -->
@@ -28,7 +22,7 @@
             <div class="d-flex justify-content-center mt-3">
               <!-- Primary solid button -->
               <router-link to="/sellerCategory">
-                <button type="button" class="btn btn-primary mx-2">Add</button>
+                <button type="button" class="btn btn-primary mx-2">Send request</button>
               </router-link>
               <!-- Secondary solid button -->
               <router-link to="/selLerCategory">

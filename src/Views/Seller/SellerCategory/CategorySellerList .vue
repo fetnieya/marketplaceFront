@@ -34,9 +34,9 @@
 
   <div class="col-lg-9 pt-4 pb-2 pb-sm-4">
                     <h1 class="h2 mb-4">Category list</h1>
-                    <router-link to='/addCategory'>
+                    <router-link to='/addSellerCategory'>
                         <button type="button" class="btn btn-primary btn-sm ms-auto d-block">
-                  <i class="ai-circle-plus me-2 ms-n1"></i>Add category
+                  <i class="ai-circle-plus me-2 ms-n1"></i>Request new category
               </button>
             </router-link>
 
@@ -48,7 +48,6 @@
                                         <th scope="col">label</th>
                                         <th scope="col">Number of products</th>
                                         <th scope="col">Description</th>
-                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,23 +56,7 @@
     <td>{{ category.numberOfProducts }}</td>
     <td>{{ category.description }}</td>
                                         <td class="d-flex align-items-center">
-    <!-- Edit Button -->
-    <router-link
-        :to="`editCategory/${category.id}`"
-        class="btn btn-link fw-semibold py-2 px-0"
-        title="Edit"
-    >
-        <i class="ai-edit fs-5 me-2"></i>
-    </router-link>
 
-       <!-- Delete Button -->
-       <button
-                                            @click="deleteCategory(category._id, index)"
-                                            class="btn btn-link fw-semibold py-2 px-0"
-                                            title="Delete"
-                                        >
-                                            <i class="ai-trash fs-5"></i>
-                                        </button>
 </td>
 
                                     </tr>

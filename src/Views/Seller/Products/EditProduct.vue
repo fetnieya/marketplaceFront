@@ -71,7 +71,7 @@
             <select v-model="product.category" id="category-input" class="form-select" required>
               <option value="" disabled>Select category...</option>
               <option v-for="category in categories" :key="category.id" :value="category.id">
-                {{ category.label }}
+                {{ category.label || category.name }}
               </option>
             </select>
           </div>
@@ -90,9 +90,7 @@
             <span class="input-group-text">.00</span>
           </div>
 
-
-
-          <label for="price-input" class="form-label">Discount</label>
+          <label for="discount-input" class="form-label">Discount</label>
           <div class="input-group mb-3">
             <span class="input-group-text">
               <i class="ai-dollar"></i>
@@ -101,13 +99,12 @@
               v-model="product.discount"
               type="number"
               class="form-control"
-              id="price-input"
+              id="discount-input"
               placeholder="Discount"
               required
             />
             <span class="input-group-text">.00</span>
           </div>
-
 
           <div class="d-flex justify-content-center mt-3">
             <button type="submit" class="btn btn-primary mx-2">Save Changes</button>
@@ -159,6 +156,11 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3000/products/${productId}`);
         this.product = response.data;
+        
+        // Make sure category is stored as an ID, not an object
+        if (this.product.category && typeof this.product.category === 'object') {
+          this.product.category = this.product.category.id;
+        }
       } catch (error) {
         console.error('Error fetching product details:', error);
       }
@@ -210,11 +212,14 @@ export default {
           this.product.video = videoUrl;
         }
 
+        // Ensure the category is sent as an ID
+        const categoryId = parseInt(this.product.category) || this.product.category;
+
         // Update product with new data
         await axios.put(`http://localhost:3000/products/${productId}`, {
           name: this.product.name,
           description: this.product.description,
-          category: this.product.category,
+          category: categoryId, // Ensure we're sending the ID, not the object
           price: parseFloat(this.product.price),
           discount: parseFloat(this.product.discount),
           image: this.product.image,

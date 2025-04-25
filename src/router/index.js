@@ -27,10 +27,10 @@ import AddProduct from '../Views/Seller/Products/AddProduct.vue';
 import EditProduct from '../Views/Seller/Products/EditProduct.vue';
 import CategorySellerList from "../Views/Seller/SellerCategory/CategorySellerList .vue";
 import AddSellerCategory from '../Views/Seller/SellerCategory/AddSellerCategory.vue';
-import EditSellerCategory from '../Views/Seller/SellerCategory/EditSellerCategory .vue';
 import UserComments from '../Views/Seller/UserComments.vue';
 import ResetPassword from '../Views/Auth/ResetPassword.vue';
 import ShoppingCart from "../Views/User/Cart.vue";
+import CheckoutPay from "../Views/User/checkout.vue";
 const routes = [
     { path: '/sign-in', component: SignIn, meta: { layout: 'AuthLayout' } },
     { path: '/sign-up', component: SignUp, meta: { layout: 'AuthLayout' } },
@@ -39,7 +39,7 @@ const routes = [
     { path: '/catalog', component: Catalog, meta: { layout: 'DefaultLayout' } },
     { path: '/wishlist', component: WishList, meta: { layout: 'DefaultLayout' } },
     { path: '/following-market', component: FollowingMarket, meta: { layout: 'DefaultLayout' } },
-    { path: '/shop-single', component: ShopSingle, meta: { layout: 'DefaultLayout' } },
+    { path: '/shop-single/:id', component: ShopSingle, meta: { layout: 'DefaultLayout' } },
     { path: '/market-page', component: MarketPage, meta: { layout: 'DefaultLayout' } },
     { path: '/admin', component: AdminDashboard, meta: { layout: 'AdminLayout' } },
     { path: '/seller', component: SellerDashboard, meta: { layout: 'SellerLayout' } },
@@ -60,9 +60,9 @@ const routes = [
     { path: '/editProduct/:id', component: EditProduct, meta: { layout: 'SellerLayout' } },
     { path: '/sellerCategory', component: CategorySellerList, meta: { layout: 'SellerLayout' } },
     { path: '/addSellerCategory', component: AddSellerCategory, meta: { layout: 'SellerLayout' } },
-    { path: '/editSellerCategory/:id', component: EditSellerCategory, meta: { layout: 'SellerLayout' } },
     { path: '/comments', component: UserComments, meta: { layout: 'SellerLayout' } },
     { path: '/cart', component: ShoppingCart, meta: { layout: 'DefaultLayout' } },
+    { path: '/checkout', component: CheckoutPay, meta: { layout: 'DefaultLayout' } },
 
 ];
 

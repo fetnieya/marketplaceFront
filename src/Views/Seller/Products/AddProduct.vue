@@ -94,10 +94,7 @@
             <span class="input-group-text">.00</span>
           </div>
 
-
-
-
-          <label for="price-input" class="form-label">Discount</label>
+          <label for="discount-input" class="form-label">Discount</label>
           <div class="input-group mb-3">
             <span class="input-group-text">
               <i class="ai-dollar"></i>
@@ -106,19 +103,20 @@
               v-model="product.discount"
               type="number"
               class="form-control"
-              id="price-input"
+              id="discount-input"
               placeholder="Amount"
               required
             />
             <span class="input-group-text">.00</span>
           </div>
 
-
-
           <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary mx-2">Add</button>
+            <button type="submit" class="btn btn-primary mx-2" :disabled="isLoading">
+              <span  class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              
+            </button>
             <router-link to="/products">
-              <button type="button" class="btn btn-secondary mx-2">Cancel</button>
+              <button type="button" class="btn btn-secondary mx-2" :disabled="isLoading">Cancel</button>
             </router-link>
           </div>
         </div>
@@ -139,7 +137,7 @@ export default {
         description: "",
         category: "",
         price: 0,
-        discount:0,
+        discount: 0,
         image: null,
         video: null
       },
@@ -158,6 +156,7 @@ export default {
         this.categories = response.data;
       } catch (error) {
         console.error("Error fetching categories:", error);
+        alert("Failed to load categories. Please try again.");
       }
     },
 
@@ -176,62 +175,71 @@ export default {
     },
 
     async uploadToCloudinary(file, type = 'image') {
-  const formData = new FormData();
-  formData.append('file', file);
+      const formData = new FormData();
+      formData.append('file', file);
 
-  try {
-    const response = await axios.post('http://localhost:3000/upload/file', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+      try {
+        const response = await axios.post('http://localhost:3000/upload/file', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        
+        console.log(`${type} upload response:`, response.data);
+        return response.data.secure_url || response.data.url;
+      } catch (error) {
+        console.error(`Error uploading ${type}:`, error);
+        throw new Error(`Failed to upload ${type}`);
       }
-    });
+    },
     
-    console.log(`${type} upload response:`, response.data);
-    return response.data.secure_url || response.data.url;
-  } catch (error) {
-    console.error(`Error uploading ${type}:`, error);
-    throw new Error(`Failed to upload ${type}`);
-  }},
-  async addProduct() {
-  try {
-    // Upload image first
-    let imageUrl = null;
-    let videoUrl = null;
+    async addProduct() {
+      try {
+        this.isLoading = true;
+        
+        if (!this.selectedImage) {
+          throw new Error('Product image is required');
+        }
+        
+        // Upload image first
+        let imageUrl = null;
+        let videoUrl = null;
 
-    if (this.selectedImage) {
-      imageUrl = await this.uploadToCloudinary(this.selectedImage, 'image');
-      console.log('Uploaded image URL:', imageUrl);
+        imageUrl = await this.uploadToCloudinary(this.selectedImage, 'image');
+        console.log('Uploaded image URL:', imageUrl);
+
+        // Then upload video if exists
+        if (this.selectedVideo) {
+          videoUrl = await this.uploadToCloudinary(this.selectedVideo, 'video');
+          console.log('Uploaded video URL:', videoUrl);
+        }
+
+        // Create product with URLs
+        const productData = {
+          name: this.product.name,
+          description: this.product.description,
+          category: this.product.category, // Fixed: use the selected category ID
+          price: parseFloat(this.product.price),
+          discount: parseFloat(this.product.discount),
+          image: imageUrl,
+          video: videoUrl
+        };
+
+        console.log('Sending product data:', productData);
+
+        // Send to your backend
+        const response = await axios.post('http://localhost:3000/products', productData);
+        console.log('Product created:', response.data);
+        
+        // Navigate back to products list
+        this.$router.push('/products');
+      } catch (error) {
+        console.error('Error in addProduct:', error);
+        alert(error.message || 'Failed to add product');
+      } finally {
+        this.isLoading = false;
+      }
     }
-
-    // Then upload video if exists
-    if (this.selectedVideo) {
-      videoUrl = await this.uploadToCloudinary(this.selectedVideo, 'video');
-      console.log('Uploaded video URL:', videoUrl);
-    }
-
-    // Create product with URLs
-    const productData = {
-      name: this.product.name,
-      description: this.product.description,
-      category: this.category.label,
-      price: parseFloat(this.product.price),
-      image: imageUrl,
-      video: videoUrl
-    };
-
-    console.log('Sending product data:', productData);
-
-    // Send to your backend
-    const response = await axios.post('http://localhost:3000/products', productData);
-    console.log('Product created:', response.data);
-    
-    // Navigate back to products list
-    this.$router.push('/products');
-  } catch (error) {
-    console.error('Error in addProduct:', error);
-    alert(error.message || 'Failed to add product');
-  }
-}
   },
   mounted() {
     this.fetchCategories();
@@ -243,6 +251,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .min-vh-100 {
   min-height: 100vh;
