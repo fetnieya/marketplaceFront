@@ -71,7 +71,7 @@
             </div>
 
             <div class="my-4"></div>
-            <!-- Market (checkboxes) - UPDATED -->
+            <!-- Market (checkboxes) -->
             <h3 class="h5">Markets</h3>
             <div class="pb-2">
               <div v-if="!marketsLoading && markets.length > 0">
@@ -157,31 +157,31 @@
               <span class="badge bg-danger bg-opacity-10 text-danger position-absolute top-0 start-0 mt-3 ms-3" 
                     v-if="product.sale">Sale</span>
                     <button class="btn btn-icon btn-sm btn-light bg-light border-0 rounded-circle position-absolute top-0 end-0 mt-3 me-3 z-5" 
-            type="button" 
-            aria-label="Add to Favorites"
-            @click.prevent="toggleWishlist(product)">
-      <i class="ai-heart fs-xl" :class="isInWishlist(product.id) ? 'text-danger' : 'text-nav'"></i>
-    </button>
+                    type="button" 
+                    aria-label="Add to Favorites"
+                    @click.prevent="toggleWishlist(product)">
+                    <i class="ai-heart fs-xl" :class="isInWishlist(product.id) ? 'text-danger' : 'text-nav'"></i>
+                  </button>
               <div class="swiper swiper-nav-onhover">
-  <router-link class="swiper-wrapper" :to="`/shop-single/${product.id}`">
-    <div class="swiper-slide p-2 p-xl-4">
-      <img class="d-block mx-auto" :src="product.image" width="226" :alt="product.name">
-    </div>
-  </router-link>
-  <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
-    <i class="ai-chevron-left fs-xl text-nav"></i>
-  </button>
-  <button class="btn btn-next btn-icon btn-sm btn-light bg-light border-0 rounded-circle end-0" type="button" aria-label="Next">
-    <i class="ai-chevron-right fs-xl text-nav"></i>
-  </button>
-</div>
+                <router-link class="swiper-wrapper" :to="`/shop-single/${product.id}`">
+                  <div class="swiper-slide p-2 p-xl-4">
+                    <img class="d-block mx-auto" :src="product.image" width="226" :alt="product.name">
+                  </div>
+                </router-link>
+                <button class="btn btn-prev btn-icon btn-sm btn-light bg-light border-0 rounded-circle start-0" type="button" aria-label="Prev">
+                  <i class="ai-chevron-left fs-xl text-nav"></i>
+                </button>
+                <button class="btn btn-next btn-icon btn-sm btn-light bg-light border-0 rounded-circle end-0" type="button" aria-label="Next">
+                  <i class="ai-chevron-right fs-xl text-nav"></i>
+                </button>
+              </div>
             </div>
             <div class="d-flex mb-1">
-  <h3 class="h6 mb-0">
-    <router-link :to="`/shop-single/${product.id}`">{{ product.name }}</router-link>
-  </h3>
-  <div class="d-flex ps-2 mt-n1 ms-auto"></div>
-</div>
+              <h3 class="h6 mb-0">
+                <router-link :to="`/shop-single/${product.id}`">{{ product.name }}</router-link>
+              </h3>
+              <div class="d-flex ps-2 mt-n1 ms-auto"></div>
+            </div>
             <div class="d-flex align-items-center">
               <span class="me-2">${{ product.price.toFixed(2) }}</span>
               <del class="fs-sm text-body-secondary" v-if="product.oldPrice">${{ product.oldPrice.toFixed(2) }}</del>
@@ -269,12 +269,38 @@ export default {
       return this.products || [];
     },
     
-    // Dynamically calculate category filter counts
+    // Modified to show all categories from admin list with product counts
     categoryFilters() {
       const counts = {};
+      
+      // Initialize all categories from admin list with zero count
+      if (this.categories && this.categories.length > 0) {
+        this.categories.forEach(category => {
+          counts[category.id] = 0;
+        });
+      }
+      
+      // Then count products in each category
       this.allProducts.forEach(product => {
-        counts[product.category] = (counts[product.category] || 0) + 1;
+        if (product.category && counts[product.category] !== undefined) {
+          counts[product.category]++;
+        }
       });
+      
+      return counts;
+    },
+    
+    // Calculate category counts for API sharing
+    categoryProductCounts() {
+      const counts = {};
+      
+      // Count products in each category
+      this.allProducts.forEach(product => {
+        if (product.category) {
+          counts[product.category] = (counts[product.category] || 0) + 1;
+        }
+      });
+      
       return counts;
     },
     
@@ -407,274 +433,318 @@ export default {
       handler(newProducts) {
         if (newProducts && newProducts.length > 0) {
           this.reloadMarketFilters();
+          this.updateCategoryProductCounts();
         }
       },
       immediate: true
     }
   },
-methods: {
-  async fetchCategories() {
-    try {
-      const response = await axios.get('http://localhost:3000/categories');
-      this.categories = response.data;
-      console.log("Categories loaded:", this.categories);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      this.error = 'Failed to load categories';
-    }
-  },
-  
-  async fetchMarkets() {
-    this.marketsLoading = true;
-    try {
-      const response = await axios.get('http://localhost:3000/markets');
+  methods: {
+    async fetchCategories() {
+      try {
+        const response = await axios.get('http://localhost:3000/categories');
+        this.categories = response.data;
+        console.log("Categories loaded:", this.categories);
+        
+        // Update category product counts after loading categories
+        if (this.products.length > 0) {
+          this.updateCategoryProductCounts();
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        this.error = 'Failed to load categories';
+      }
+    },
+    
+    // New method to update all categories with product counts
+    async updateCategoryProductCounts() {
+      if (!this.categories || this.categories.length === 0) return;
       
-      // Process market data - ensure all markets have proper id and name
-      this.markets = response.data.map(market => {
-        // If market doesn't have an id, use the name as id
-        if (!market.id && market.name) {
-          return { ...market, id: market.name };
+      const counts = this.categoryProductCounts;
+      
+      // Update each category with its product count
+      const updatedCategories = this.categories.map(category => {
+        const count = counts[category.id] || 0;
+        
+        // Only send update request if the count is different
+        if (category.numberOfProducts !== count) {
+          return {
+            ...category,
+            numberOfProducts: count
+          };
         }
-        // If market doesn't have a name, use the id as name
-        if (!market.name && market.id) {
-          return { ...market, name: this.formatMarketName(market.id) };
-        }
-        return market;
+        return category;
       });
       
-      console.log("Markets loaded from API:", this.markets);
-    } catch (error) {
-      console.error('Error fetching markets:', error);
+      // Update categories in local state
+      this.categories = updatedCategories;
       
-      // Create markets from product data if API fails
-      if (this.products && this.products.length > 0) {
-        console.log('Creating markets from product data');
-        const uniqueMarketIds = [...new Set(this.products.map(p => p.market).filter(m => m))];
-        this.markets = uniqueMarketIds.map(marketId => ({
-          id: marketId,
-          name: this.formatMarketName(marketId)
-        }));
-        console.log('Markets created from products:', this.markets);
+      // Update counts in backend
+      try {
+        for (const category of updatedCategories) {
+          if (category.numberOfProducts !== undefined) {
+            await axios.patch(`http://localhost:3000/categories/${category.id}`, {
+              numberOfProducts: category.numberOfProducts
+            });
+          }
+        }
+        console.log("Updated category product counts in backend");
+      } catch (error) {
+        console.error("Failed to update category product counts:", error);
       }
-    } finally {
-      this.marketsLoading = false;
-    }
-  },
-  
-  // Helper method to format market names
-  formatMarketName(marketId) {
-    if (!marketId) return 'Unknown';
+    },
     
-    // Convert marketId to a readable format (e.g., "us_market" to "US Market")
-    if (typeof marketId === 'string') {
-      return marketId
-        .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    }
-    return String(marketId);
-  },
-  
-  // Get the count of products for each market
-  getMarketCount(marketId) {
-    return this.allProducts.filter(product => product.market == marketId).length;
-  },
-  
-  // Ensure markets are available for filtering
-  reloadMarketFilters() {
-    // If we don't have markets but have products, create markets from products
-    if ((!this.markets || this.markets.length === 0) && this.products.length > 0) {
-      this.fetchMarkets();
-    }
-  },
-  
-  getCategoryName(categoryId) {
-    if (!categoryId) return 'Unknown Category';
+    async fetchMarkets() {
+      this.marketsLoading = true;
+      try {
+        const response = await axios.get('http://localhost:3000/markets');
+        
+        // Process market data - ensure all markets have proper id and name
+        this.markets = response.data.map(market => {
+          // If market doesn't have an id, use the name as id
+          if (!market.id && market.name) {
+            return { ...market, id: market.name };
+          }
+          // If market doesn't have a name, use the id as name
+          if (!market.name && market.id) {
+            return { ...market, name: this.formatMarketName(market.id) };
+          }
+          return market;
+        });
+        
+        console.log("Markets loaded from API:", this.markets);
+      } catch (error) {
+        console.error('Error fetching markets:', error);
+        
+        // Create markets from product data if API fails
+        if (this.products && this.products.length > 0) {
+          console.log('Creating markets from product data');
+          const uniqueMarketIds = [...new Set(this.products.map(p => p.market).filter(m => m))];
+          this.markets = uniqueMarketIds.map(marketId => ({
+            id: marketId,
+            name: this.formatMarketName(marketId)
+          }));
+          console.log('Markets created from products:', this.markets);
+        }
+      } finally {
+        this.marketsLoading = false;
+      }
+    },
     
-    const category = this.categories.find(cat => cat.id == categoryId);
-    return category ? category.label : 'Unknown Category';
-  },
-  
-  getMarketName(marketId) {
-    if (!marketId) return 'Unknown Market';
-    
-    const market = this.markets.find(m => m.id == marketId);
-    return market ? market.name : this.formatMarketName(marketId);
-  },
-  
-  async fetchProducts() {
-    this.loading = true;
-    this.error = null;
-    try {
-      // Fetch categories first
-      await this.fetchCategories();
+    // Helper method to format market names
+    formatMarketName(marketId) {
+      if (!marketId) return 'Unknown';
       
-      const response = await axios.get('http://localhost:3000/products');
-      this.products = response.data;
-      console.log("Products loaded:", this.products.length);
+      // Convert marketId to a readable format (e.g., "us_market" to "US Market")
+      if (typeof marketId === 'string') {
+        return marketId
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+      return String(marketId);
+    },
+    
+    // Get the count of products for each market
+    getMarketCount(marketId) {
+      return this.allProducts.filter(product => product.market == marketId).length;
+    },
+    
+    // Ensure markets are available for filtering
+    reloadMarketFilters() {
+      // If we don't have markets but have products, create markets from products
+      if ((!this.markets || this.markets.length === 0) && this.products.length > 0) {
+        this.fetchMarkets();
+      }
+    },
+    
+    getCategoryName(categoryId) {
+      if (!categoryId) return 'Unknown Category';
       
-      // Set initial price range based on product data
-      if (this.products.length > 0) {
-        const prices = this.products.map(p => p.price);
+      const category = this.categories.find(cat => cat.id == categoryId);
+      return category ? category.label : 'Unknown Category';
+    },
+    
+    getMarketName(marketId) {
+      if (!marketId) return 'Unknown Market';
+      
+      const market = this.markets.find(m => m.id == marketId);
+      return market ? market.name : this.formatMarketName(marketId);
+    },
+    
+    async fetchProducts() {
+      this.loading = true;
+      this.error = null;
+      try {
+        // Fetch categories first
+        await this.fetchCategories();
+        
+        const response = await axios.get('http://localhost:3000/products');
+        this.products = response.data;
+        console.log("Products loaded:", this.products.length);
+        
+        // Set initial price range based on product data
+        if (this.products.length > 0) {
+          const prices = this.products.map(p => p.price);
+          this.priceRange.min = Math.floor(Math.min(...prices));
+          this.priceRange.max = Math.ceil(Math.max(...prices));
+        }
+        
+        // Now fetch markets AFTER we have products
+        await this.fetchMarkets();
+        
+      } catch (error) {
+        this.error = 'Failed to fetch products. Please try again.';
+        console.error('Error fetching products:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    // Get product name using category ID
+    getProductName(categoryId) {
+      return this.getCategoryName(categoryId);
+    },
+    
+    // Apply all filters
+    applyFilters() {
+      this.currentPage = 1; // Reset to first page when filters change
+    },
+    
+    // Remove a specific filter
+    removeFilter(filter) {
+      if (filter.type === 'category') {
+        this.selectedCategoryFilters = this.selectedCategoryFilters.filter(cat => {
+          return this.getCategoryName(cat) !== filter.value;
+        });
+      } else if (filter.type === 'market') {
+        this.selectedMarketFilters = this.selectedMarketFilters.filter(market => {
+          return this.getMarketName(market) !== filter.value;
+        });
+      } else if (filter.type === 'price') {
+        this.priceRange.min = 0;
+        this.priceRange.max = Math.max(...this.allProducts.map(p => p.price), 100);
+      }
+      this.applyFilters();
+    },
+    
+    // Clear all filters
+    clearAllFilters() {
+      this.selectedCategoryFilters = [];
+      this.selectedMarketFilters = [];
+      
+      // Reset price range to min/max of available products
+      if (this.allProducts.length > 0) {
+        const prices = this.allProducts.map(p => p.price);
         this.priceRange.min = Math.floor(Math.min(...prices));
         this.priceRange.max = Math.ceil(Math.max(...prices));
+      } else {
+        this.priceRange.min = 0;
+        this.priceRange.max = 100;
       }
       
-      // Now fetch markets AFTER we have products
-      await this.fetchMarkets();
+      this.applyFilters();
+    },
+    
+    // Apply sorting
+    applySort() {
+      // No additional action needed as computed property handles this
+    },
+    
+    // Sort products based on selected option
+    sortProducts(products) {
+      const sortedProducts = [...products];
       
-    } catch (error) {
-      this.error = 'Failed to fetch products. Please try again.';
-      console.error('Error fetching products:', error);
-    } finally {
-      this.loading = false;
-    }
-  },
-  
-  // Get product name using category ID
-  getProductName(categoryId) {
-    return this.getCategoryName(categoryId);
-  },
-  
-  // Apply all filters
-  applyFilters() {
-    this.currentPage = 1; // Reset to first page when filters change
-  },
-  
-  // Remove a specific filter
-  removeFilter(filter) {
-    if (filter.type === 'category') {
-      this.selectedCategoryFilters = this.selectedCategoryFilters.filter(cat => {
-        return this.getCategoryName(cat) !== filter.value;
-      });
-    } else if (filter.type === 'market') {
-      this.selectedMarketFilters = this.selectedMarketFilters.filter(market => {
-        return this.getMarketName(market) !== filter.value;
-      });
-    } else if (filter.type === 'price') {
-      this.priceRange.min = 0;
-      this.priceRange.max = Math.max(...this.allProducts.map(p => p.price), 100);
-    }
-    this.applyFilters();
-  },
-  
-  // Clear all filters
-  clearAllFilters() {
-    this.selectedCategoryFilters = [];
-    this.selectedMarketFilters = [];
+      switch (this.sortOption) {
+        case 'low-high':
+          return sortedProducts.sort((a, b) => a.price - b.price);
+        case 'high-low':
+          return sortedProducts.sort((a, b) => b.price - a.price);
+        case 'az':
+          return sortedProducts.sort((a, b) => {
+            const nameA = this.getProductName(a.category) || '';
+            const nameB = this.getProductName(b.category) || '';
+            return nameA.localeCompare(nameB);
+          });
+        case 'za':
+          return sortedProducts.sort((a, b) => {
+            const nameA = this.getProductName(a.category) || '';
+            const nameB = this.getProductName(b.category) || '';
+            return nameB.localeCompare(nameA);
+          });
+        case 'rating':
+          // Would need actual rating data - for now just return unsorted
+          return sortedProducts;
+        case 'popular':
+        default:
+          // This would typically be based on a popularity metric
+          // For now, just return the original order
+          return sortedProducts;
+      }
+    },
     
-    // Reset price range to min/max of available products
-    if (this.allProducts.length > 0) {
-      const prices = this.allProducts.map(p => p.price);
-      this.priceRange.min = Math.floor(Math.min(...prices));
-      this.priceRange.max = Math.ceil(Math.max(...prices));
-    } else {
-      this.priceRange.min = 0;
-      this.priceRange.max = 100;
-    }
+    // Update products per page
+    updatePagination() {
+      this.currentPage = 1; // Reset to first page when changing items per page
+    },
     
-    this.applyFilters();
-  },
-  
-  // Apply sorting
-  applySort() {
-    // No additional action needed as computed property handles this
-  },
-  
-  // Sort products based on selected option
-  sortProducts(products) {
-    const sortedProducts = [...products];
+    // Go to specific page
+    goToPage(page) {
+      this.currentPage = page;
+      // In a real application, you might want to scroll to top of products
+      window.scrollTo(0, 0);
+    },
     
-    switch (this.sortOption) {
-      case 'low-high':
-        return sortedProducts.sort((a, b) => a.price - b.price);
-      case 'high-low':
-        return sortedProducts.sort((a, b) => b.price - a.price);
-      case 'az':
-        return sortedProducts.sort((a, b) => {
-          const nameA = this.getProductName(a.category) || '';
-          const nameB = this.getProductName(b.category) || '';
-          return nameA.localeCompare(nameB);
-        });
-      case 'za':
-        return sortedProducts.sort((a, b) => {
-          const nameA = this.getProductName(a.category) || '';
-          const nameB = this.getProductName(b.category) || '';
-          return nameB.localeCompare(nameA);
-        });
-      case 'rating':
-        // Would need actual rating data - for now just return unsorted
-        return sortedProducts;
-      case 'popular':
-      default:
-        // This would typically be based on a popularity metric
-        // For now, just return the original order
-        return sortedProducts;
-    }
-  },
-  
-  // Update products per page
-  updatePagination() {
-    this.currentPage = 1; // Reset to first page when changing items per page
-  },
-  
-  // Go to specific page
-  goToPage(page) {
-    this.currentPage = page;
-    // In a real application, you might want to scroll to top of products
-    window.scrollTo(0, 0);
-  },
-  
-  // Load more products (increment page)
-  loadMoreProducts() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
-  },
-  
-  // Add product to cart
-  addToCart(product) {
-    this.cart.push(product);
-    // In a real app, you would show some feedback to the user
-    alert(`Added ${this.getProductName(product.category)} to cart!`);
-  },
-  
-  // Wishlist methods (fixed to be inside the methods object)
-  isInWishlist(productId) {
-    return this.wishlist.some(item => item.id === productId);
-  },
-  
-  toggleWishlist(product) {
-    if (this.isInWishlist(product.id)) {
-      this.removeFromWishlist(product.id);
-    } else {
-      this.addToWishlist(product);
-    }
-  },
-  
-  addToWishlist(product) {
-    if (!this.isInWishlist(product.id)) {
-      this.wishlist.push(product);
+    // Load more products (increment page)
+    loadMoreProducts() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    
+    // Add product to cart
+    addToCart(product) {
+      this.cart.push(product);
+      // In a real app, you would show some feedback to the user
+      alert(`Added ${this.getProductName(product.category)} to cart!`);
+    },
+    
+    // Wishlist methods
+    isInWishlist(productId) {
+      return this.wishlist.some(item => item.id === productId);
+    },
+    
+    toggleWishlist(product) {
+      if (this.isInWishlist(product.id)) {
+        this.removeFromWishlist(product.id);
+      } else {
+        this.addToWishlist(product);
+      }
+    },
+    
+    addToWishlist(product) {
+      if (!this.isInWishlist(product.id)) {
+        this.wishlist.push(product);
+        this.saveWishlistToStorage();
+      }
+    },
+    
+    removeFromWishlist(productId) {
+      this.wishlist = this.wishlist.filter(item => item.id !== productId);
       this.saveWishlistToStorage();
+    },
+    
+    saveWishlistToStorage() {
+      localStorage.setItem('wishlist', JSON.stringify(this.wishlist));
+    },
+    
+    loadWishlistFromStorage() {
+      const savedWishlist = localStorage.getItem('wishlist');
+      if (savedWishlist) {
+        this.wishlist = JSON.parse(savedWishlist);
+      }
     }
   },
-  
-  removeFromWishlist(productId) {
-    this.wishlist = this.wishlist.filter(item => item.id !== productId);
-    this.saveWishlistToStorage();
-  },
-  
-  saveWishlistToStorage() {
-    localStorage.setItem('wishlist', JSON.stringify(this.wishlist));
-  },
-  
-  loadWishlistFromStorage() {
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      this.wishlist = JSON.parse(savedWishlist);
-    }
-  }
-},
   created() {
     // Load initial data
     this.fetchProducts();
