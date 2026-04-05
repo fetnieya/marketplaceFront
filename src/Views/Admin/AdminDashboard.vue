@@ -1,206 +1,414 @@
 <template>
-  <!-- Page container -->
-  <div class="container py-5 mt-4 mt-lg-5 mb-lg-4 my-xl-5">
-    <div class="row pt-sm-2 pt-lg-0">
-      <!-- Sidebar (offcanvas on screens < 992px) -->
-      <aside class="col-lg-3 pe-lg-4 pe-xl-5 mt-n3">
-        <div class="d-none d-lg-block" style="padding-top: 105px;"></div>
-        <div class="offcanvas-lg offcanvas-start" id="sidebarAccount">
-          <button class="btn-close position-absolute top-0 end-0 mt-3 me-3 d-lg-none" type="button" data-bs-dismiss="offcanvas" data-bs-target="#sidebarAccount" aria-label="Close"></button>
-          <div class="offcanvas-body">
-            <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
-              <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Menu</h4>
-              <router-link class="nav-link fw-semibold py-2 px-0" to="/admin">
-                <i class="ai-dashboard fs-5 opacity-60 me-2"></i> Dashboard
-              </router-link>
-              <router-link class="nav-link fw-semibold py-2 px-0" to="/users">
-                <i class="ai-user-group fs-5 opacity-60 me-2"></i> Users
-              </router-link>
-              <router-link class="nav-link fw-semibold py-2 px-0" to="/markets">
-                <i class="ai-shopping-bag fs-5 opacity-60 me-2"></i> Markets
-              </router-link>
-              <router-link class="nav-link fw-semibold py-2 px-0" to="/category">
-                <i class="ai-grid fs-5 opacity-60 me-2"></i> Categories
-              </router-link>
-            </nav>
+  <div class="admin-dashboard-content">
+    <div v-if="loading" class="text-center py-5 text-body-secondary">
+      Chargement des statistiques…
+    </div>
+
+    <template v-else>
+      <div v-if="error" class="alert alert-warning" role="alert">
+        {{ error }}
+        <span class="d-block small mt-1 mb-0">
+          Les indicateurs ci-dessous peuvent être à zéro si la connexion à l’API a échoué.
+        </span>
+      </div>
+
+      <div class="row g-3 g-xl-4 mb-4">
+        <div class="col-md-4 col-sm-6">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Clients</h2>
+            <div class="h2 text-primary mb-2">{{ stats.clients }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Utilisateurs inscrits</p>
           </div>
         </div>
-      </aside>
-
-      <!-- Page content -->
-      <div class="col-lg-9 pt-4 pb-2 pb-sm-4">
-        <div class="d-sm-flex align-items-center mb-4">
-          <h1 class="h2 mb-4 mb-sm-0 me-4">Dashboard</h1>
-          <div class="d-flex ms-auto">
-            <button class="btn btn-secondary me-3 me-sm-4" type="button">
-              <i class="ai-download me-2 ms-n1"></i> Download
-            </button>
-            <select class="form-select">
-              <option value="Last week">Last week</option>
-              <option value="Last month">Last month</option>
-              <option value="Last 3 months">Last 3 months</option>
-              <option value="Last 6 months">Last 6 months</option>
-              <option value="Last year">Last year</option>
-            </select>
+        <div class="col-md-4 col-sm-6">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Vendeurs</h2>
+            <div class="h2 text-primary mb-2">{{ stats.sellers }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Boutiques</p>
           </div>
         </div>
-
-        <div class="card border-0 py-1 p-md-2 p-xl-3 p-xxl-4">
-          <div class="card-body">
-            <!-- Stats -->
-            <div class="row g-3 g-xl-4">
-              <div class="col-md-4 col-sm-6">
-                <div class="h-100 bg-secondary rounded-3 text-center p-4">
-                  <h2 class="h6 pb-2 mb-1">Earnings (before taxes)</h2>
-                  <div class="h2 text-primary mb-2">$842.00</div>
-                  <p class="fs-sm text-body-secondary mb-0">Sales 8/1/2023 - 8/15/2023</p>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-6">
-                <div class="h-100 bg-secondary rounded-3 text-center p-4">
-                  <h2 class="h6 pb-2 mb-1">Your balance</h2>
-                  <div class="h2 text-primary mb-2">$735.00</div>
-                  <p class="fs-sm text-body-secondary mb-0">To be paid on 8/15/2023</p>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-12">
-                <div class="h-100 bg-secondary rounded-3 text-center p-4">
-                  <h2 class="h6 pb-2 mb-1">Lifetime earnings</h2>
-                  <div class="h2 text-primary mb-2">$9,156.74</div>
-                  <p class="fs-sm text-body-secondary mb-0">Based on list price</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sales value line chart -->
-            <div class="row g-4 py-4">
-              <div class="col-md-8">
-                <div class="h-100 border rounded-3 p-4">
-                  <h2 class="h6 text-center text-sm-start mb-4">Sales value, USD</h2>
-                  <canvas id="salesChart"></canvas>
-                </div>
-              </div>
-
-              <!-- New Bar Chart for Sales by Category -->
-              <div class="col-md-4">
-                <div class="h-100 border rounded-3 p-4">
-                  <h2 class="h6 text-center text-sm-start mb-4">Sales by Category</h2>
-                  <canvas id="categoryChart"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <!-- New Radar Chart for User Engagement -->
-            <div class="row g-4">
-              <div class="col-md-8 col-lg-12 col-xl-8 text-center text-sm-start">
-                <div class="border rounded-3 p-4">
-                  <h2 class="h6 mb-4">User Engagement by Platform</h2>
-                  <canvas id="engagementChart"></canvas>
-                </div>
-              </div>
-            </div>
-
+        <div class="col-md-4 col-sm-12">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Commandes</h2>
+            <div class="h2 text-primary mb-2">{{ stats.orders }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Total enregistrées</p>
           </div>
         </div>
       </div>
-    </div>
+
+      <div class="row g-3 g-xl-4 mb-4">
+        <div class="col-md-4 col-sm-6">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Produits</h2>
+            <div class="h2 text-primary mb-2">{{ stats.products }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Références catalogue</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Catégories</h2>
+            <div class="h2 text-primary mb-2">{{ stats.categories }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Rubriques</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="h-100 bg-secondary rounded-3 text-center p-4">
+            <h2 class="h6 pb-2 mb-1">Chiffre d'affaires</h2>
+            <div class="h2 text-primary mb-2">{{ formatMoney(stats.revenue) }}</div>
+            <p class="fs-sm text-body-secondary mb-0">Total des commandes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modèle de prévision (CA / proxy profit) -->
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="border border-primary border-opacity-25 rounded-3 p-4 bg-body-secondary bg-opacity-25">
+            <h2 class="h5 mb-2">Prévision — modèle {{ predictionModelLabel }}</h2>
+            <p class="text-body-secondary small mb-3">
+              {{ stats.prediction?.metricLabel }}.
+              {{ stats.prediction?.disclaimer }}
+            </p>
+            <div class="chart-wrap chart-wrap-tall mb-4">
+              <LineChart
+                v-if="predictionLineData"
+                :data="predictionLineData"
+                :options="lineOptions"
+              />
+              <p v-else class="text-center text-muted py-4 mb-0">
+                Données de prévision indisponibles.
+              </p>
+            </div>
+            <div class="table-responsive" v-if="stats.prediction?.forecast?.length">
+              <table class="table table-sm table-bordered mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Mois</th>
+                    <th class="text-end">CA prévu (TND)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in stats.prediction.forecast" :key="row.month">
+                    <td>{{ formatMonthLong(row.month) }}</td>
+                    <td class="text-end fw-medium">
+                      {{ formatMoneyPlain(row.value) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="h-100 border rounded-3 p-4">
+            <h2 class="h6 text-center text-sm-start mb-4">Activité des 6 derniers mois</h2>
+            <div class="chart-wrap">
+              <Bar v-if="monthlyChartData" :data="monthlyChartData" :options="barOptions" />
+              <p v-else class="text-center text-muted py-5 mb-0">
+                Pas de données sur les 6 derniers mois.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-0">
+        <div class="col-12">
+          <div class="border rounded-3 p-4">
+            <h2 class="h6 mb-4">Commandes par statut</h2>
+            <div class="chart-wrap">
+              <Doughnut v-if="statusChartData" :data="statusChartData" :options="doughnutOptions" />
+              <p v-else class="text-center text-muted py-5 mb-0">Aucune commande enregistrée.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import { onMounted } from 'vue'
-import Chart from 'chart.js/auto'
+import axios from 'axios';
+import { Bar, Doughnut, Line as LineChart } from 'vue-chartjs';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement,
+  LineController,
+  Filler,
+} from 'chart.js';
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement,
+  LineController,
+  Filler,
+);
+
+function emptyAdminStats() {
+  return {
+    clients: 0,
+    sellers: 0,
+    products: 0,
+    categories: 0,
+    orders: 0,
+    revenue: 0,
+    monthly: [],
+    ordersByStatus: [],
+    prediction: null,
+  };
+}
 
 export default {
-  name: "AdminDashboard",
-  setup() {
-    onMounted(() => {
-      // Sales value line chart
-      new Chart(document.getElementById('salesChart'), {
-        type: 'line',
-        data: {
-          labels: ["22 Jul", "", "24 Jul", "", "26 Jul", "", "28 Jul", "", "30 Jul", "", "01 Aug", "", "03 Aug", "", "05 Aug"],
-          datasets: [{
-            label: "Sales, USD",
+  name: 'AdminDashboard',
+  components: { Bar, Doughnut, LineChart },
+  data() {
+    return {
+      apiBase: process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000',
+      loading: true,
+      error: null,
+      stats: emptyAdminStats(),
+      barOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+          },
+          y: {
+            type: 'linear',
+            position: 'left',
+            beginAtZero: true,
+            title: { display: true, text: 'Commandes' },
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            beginAtZero: true,
+            grid: { drawOnChartArea: false },
+            title: { display: true, text: 'CA (TND)' },
+          },
+        },
+      },
+      doughnutOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right' },
+        },
+      },
+      lineOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top' },
+        },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'TND' } },
+        },
+      },
+    };
+  },
+  computed: {
+    predictionModelLabel() {
+      return this.stats.prediction?.model === 'linear_regression'
+        ? 'régression linéaire (12 mois)'
+        : 'statistique';
+    },
+    predictionLineData() {
+      const p = this.stats.prediction;
+      if (!p || (!p.historical?.length && !p.forecast?.length)) {
+        return null;
+      }
+      const h = p.historical || [];
+      const f = p.forecast || [];
+      const labels = [
+        ...h.map((x) => this.formatMonthLabel(x.month)),
+        ...f.map((x) => this.formatMonthLabel(x.month)),
+      ];
+      return {
+        labels,
+        datasets: [
+          {
+            label: 'Réalisé (historique)',
+            data: [...h.map((x) => x.value), ...f.map(() => null)],
+            borderColor: 'rgba(13, 110, 253, 1)',
+            backgroundColor: 'rgba(13, 110, 253, 0.08)',
             fill: true,
-            data: [0, 100, 200, 175, 100, 50, 75, 0, 0, 50, 50, 50, 0, 100, 0],
-            backgroundColor: "rgba(68,140,116,.1)",
-            borderWidth: 2,
-            borderColor: "rgba(68,140,116,.6)",
-            pointBackgroundColor: "#448c74",
-            pointBorderWidth: 3,
-            pointBorderColor: "#448c74",
-            pointHoverBorderColor: "#448c74",
-            pointHoverBorderWidth: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              border: {
-                color: "rgba(133,140,151,.18)"
-              },
-              grid: {
-                color: "rgba(133,140,151,.18)"
-              }
-            },
-            x: {
-              border: {
-                color: "rgba(133,140,151,.18)"
-              },
-              grid: {
-                color: "rgba(133,140,151,.18)"
-              }
-            }
-          }
-        }
-      })
-
-      // Sales by Category Bar chart
-      new Chart(document.getElementById('categoryChart'), {
-        type: 'bar',
-        data: {
-          labels: ["Electronics", "Clothing", "Home", "Beauty", "Books"],
-          datasets: [{
-            label: "Sales, USD",
-            data: [300, 150, 250, 200, 180],
-            backgroundColor: "rgba(68,140,116,.6)",
-            borderColor: "rgba(68,140,116,.9)",
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      })
-
-      // User Engagement Radar chart
-      new Chart(document.getElementById('engagementChart'), {
-        type: 'radar',
-        data: {
-          labels: ['Web', 'Mobile', 'Social Media', 'Email', 'Direct'],
-          datasets: [{
-            label: 'Engagement Level',
-            data: [80, 90, 70, 60, 50],
-            backgroundColor: "rgba(68,140,116,.3)",
-            borderColor: "rgba(68,140,116,.6)",
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true
-        }
-      })
-    })
-
-    return {}
-  }
-}
+            tension: 0.25,
+            spanGaps: false,
+          },
+          {
+            label: 'Prévision (5 mois)',
+            data: [...h.map(() => null), ...f.map((x) => x.value)],
+            borderColor: 'rgba(220, 53, 69, 1)',
+            backgroundColor: 'rgba(220, 53, 69, 0.06)',
+            borderDash: [8, 4],
+            fill: true,
+            tension: 0.25,
+            spanGaps: false,
+          },
+        ],
+      };
+    },
+    monthlyChartData() {
+      if (!this.stats?.monthly?.length) return null;
+      const labels = this.stats.monthly.map((m) => this.formatMonthLabel(m.month));
+      return {
+        labels,
+        datasets: [
+          {
+            label: 'Nombre de commandes',
+            data: this.stats.monthly.map((m) => m.orders),
+            backgroundColor: 'rgba(13, 110, 253, 0.55)',
+            borderColor: 'rgba(13, 110, 253, 1)',
+            borderWidth: 1,
+            yAxisID: 'y',
+          },
+          {
+            label: 'CA (TND)',
+            data: this.stats.monthly.map((m) => m.revenue),
+            backgroundColor: 'rgba(25, 135, 84, 0.45)',
+            borderColor: 'rgba(25, 135, 84, 1)',
+            borderWidth: 1,
+            yAxisID: 'y1',
+          },
+        ],
+      };
+    },
+    statusChartData() {
+      if (!this.stats?.ordersByStatus?.length) return null;
+      const palette = [
+        '#0d6efd',
+        '#198754',
+        '#ffc107',
+        '#dc3545',
+        '#6f42c1',
+        '#fd7e14',
+      ];
+      return {
+        labels: this.stats.ordersByStatus.map((s) => s.status || '—'),
+        datasets: [
+          {
+            data: this.stats.ordersByStatus.map((s) => s.count),
+            backgroundColor: this.stats.ordersByStatus.map(
+              (_, i) => palette[i % palette.length],
+            ),
+          },
+        ],
+      };
+    },
+  },
+  mounted() {
+    this.loadStats();
+  },
+  methods: {
+    normalizeAdmin(data) {
+      const d = data && typeof data === 'object' ? data : {};
+      return {
+        clients: Number(d.clients) || 0,
+        sellers: Number(d.sellers) || 0,
+        products: Number(d.products) || 0,
+        categories: Number(d.categories) || 0,
+        orders: Number(d.orders) || 0,
+        revenue: Number(d.revenue) || 0,
+        monthly: Array.isArray(d.monthly) ? d.monthly : [],
+        ordersByStatus: Array.isArray(d.ordersByStatus) ? d.ordersByStatus : [],
+        prediction:
+          d.prediction && typeof d.prediction === 'object' ? d.prediction : null,
+      };
+    },
+    formatMoney(n) {
+      const v = Number(n);
+      if (Number.isNaN(v)) return '—';
+      return `${v.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TND`;
+    },
+    formatMoneyPlain(n) {
+      const v = Number(n);
+      if (Number.isNaN(v)) return '—';
+      return v.toLocaleString('fr-FR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+    formatMonthLabel(ym) {
+      if (!ym || typeof ym !== 'string') return '';
+      const [y, m] = ym.split('-').map(Number);
+      if (!y || !m) return ym;
+      const d = new Date(y, m - 1, 1);
+      return d.toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
+    },
+    formatMonthLong(ym) {
+      if (!ym || typeof ym !== 'string') return '';
+      const [y, m] = ym.split('-').map(Number);
+      if (!y || !m) return ym;
+      const d = new Date(y, m - 1, 1);
+      return d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    },
+    async loadStats() {
+      this.loading = true;
+      this.error = null;
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        this.error = 'Connexion requise.';
+        this.stats = emptyAdminStats();
+        this.loading = false;
+        return;
+      }
+      try {
+        const { data } = await axios.get(`${this.apiBase}/dashboard/admin`, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        this.stats = this.normalizeAdmin(data);
+      } catch (e) {
+        const msg =
+          e.response?.data?.message ||
+          (Array.isArray(e.response?.data?.message)
+            ? e.response.data.message.join(' ')
+            : null) ||
+          e.message ||
+          'Impossible de charger le tableau de bord.';
+        this.error = typeof msg === 'string' ? msg : 'Erreur de chargement.';
+        this.stats = emptyAdminStats();
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+};
 </script>
+
+<style scoped>
+.admin-dashboard-content {
+  width: 100%;
+}
+.chart-wrap {
+  position: relative;
+  height: 280px;
+}
+.chart-wrap-tall {
+  height: 340px;
+}
+</style>

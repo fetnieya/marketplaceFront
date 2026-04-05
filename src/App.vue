@@ -1,6 +1,5 @@
 <template>
-  <component  :is="$route.meta.layout || 'default-layout'">
-    <!-- Render the current page inside the chosen layout -->
+  <component :is="layoutComponent" :key="layoutKey">
     <router-view />
   </component>
 </template>
@@ -12,31 +11,30 @@ import SellerLayout from './components/layouts/SellerLayout.vue';
 import AuthLayout from './components/layouts/AuthLayout.vue';
 export default {
   components: {
-
     DefaultLayout,
     AdminLayout,
     SellerLayout,
     AuthLayout,
   },
   computed: {
-    // Dynamically choose the layout component
+    /** Références de composants (pas des chaînes) pour éviter les erreurs de résolution :is / vnode null */
     layoutComponent() {
-      // Get the layout name from the route meta; default to 'DefaultLayout'
-      const layout = this.$route.meta.layout || 'DefaultLayout';
-
-      // Return the appropriate layout component
-      switch (layout) {
+      const name = this.$route?.meta?.layout;
+      switch (name) {
         case 'AdminLayout':
           return AdminLayout;
         case 'SellerLayout':
           return SellerLayout;
         case 'AuthLayout':
           return AuthLayout;
+        case 'DefaultLayout':
         default:
           return DefaultLayout;
       }
     },
+    layoutKey() {
+      return this.$route?.meta?.layout || 'DefaultLayout';
+    },
   },
-
 };
 </script>

@@ -19,7 +19,7 @@
                 <router-link class="nav-link fw-semibold py-2 px-0" to="/admin">
                   <i class="ai-dashboard fs-5 opacity-60 me-2"></i> Dashboard
                 </router-link>
-                <router-link class="nav-link fw-semibold py-2 px-0" to="/users">
+                <router-link class="nav-link fw-semibold py-2 px-0" to="/clients">
                   <i class="ai-user-group fs-5 opacity-60 me-2"></i> Users
                 </router-link>
                 <router-link class="nav-link fw-semibold py-2 px-0" to="/markets">

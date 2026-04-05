@@ -17,7 +17,7 @@
           />
         </div>
 
-        <!-- Number input -->
+        <!-- Number of Products - Read only -->
         <div class="mb-3">
           <label for="number-input" class="form-label">Number of Products</label>
           <input
@@ -26,7 +26,10 @@
             id="number-input"
             v-model="category.numberOfProducts"
             placeholder="0"
+            readonly
+            disabled
           />
+          <small class="form-text text-muted">Le nombre de produits est calculé automatiquement</small>
         </div>
 
         <!-- Textarea -->
@@ -53,14 +56,16 @@
 </template>
 <script>
 import axios from 'axios';
+import { toast } from '@/utils/toast';
 
 export default {
   name: 'EditCategory',
   data() {
     return {
       category: {
+        id: null,
         label: '',
-        numberOfProducts: '',
+        numberOfProducts: 0,
         description: '',
       },
     };
@@ -68,27 +73,33 @@ export default {
   methods: {
     async fetchCategory() {
       const categoryId = this.$route.params.id; 
-      console.log('====================================');
-      console.log(categoryId);
-      console.log('====================================');
       try {
         const response = await axios.get(`http://localhost:3000/categories/${categoryId}`);
         this.category = response.data;
       } catch (error) {
         console.error('Error fetching category:', error);
-       
+        toast.error('Erreur lors du chargement de la catégorie');
       }
     },
     async handleSubmit() {
-  const categoryId = this.$route.params.id; 
-  try {
-    await axios.put(`http://localhost:3000/categories/${categoryId}`, this.category);
-    this.$router.push('/category'); 
-  } catch (error) {
-    console.error('Error updating category:', error);
-  }
-}
-,
+      if (!this.category.label || !this.category.description) {
+        toast.warning('Le label et la description sont requis');
+        return;
+      }
+
+      const categoryId = this.$route.params.id; 
+      try {
+        await axios.put(`http://localhost:3000/categories/${categoryId}`, {
+          label: this.category.label,
+          description: this.category.description,
+        });
+        toast.success('Catégorie mise à jour avec succès');
+        this.$router.push('/category'); 
+      } catch (error) {
+        console.error('Error updating category:', error);
+        toast.error('Erreur lors de la mise à jour de la catégorie');
+      }
+    },
   },
   mounted() {
     this.fetchCategory(); 

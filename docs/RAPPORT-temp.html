@@ -1,0 +1,614 @@
+<h1>Rapport de planification Agile / Scrum</h1>
+<h2>Projet Marketplace multi-vendeurs (front Vue.js · back NestJS)</h2>
+<h3>Période : janvier – juin 2025 (6 mois)</h3>
+<hr>
+<p><strong>Document destiné à</strong> : rapport d’ingénierie (niveau ING2)<br><strong>Version</strong> : 1.0<br><strong>Date</strong> : mars 2025  </p>
+<hr>
+<h2>Table des matières</h2>
+<ol>
+<li><a href="#1-r%C3%A9sum%C3%A9-ex%C3%A9cutif">Résumé exécutif</a>  </li>
+<li><a href="#2-contexte-et-p%C3%A9rim%C3%A8tre-du-projet">Contexte et périmètre du projet</a>  </li>
+<li><a href="#3-architecture-technique-synth%C3%A8se">Architecture technique (synthèse)</a>  </li>
+<li><a href="#4-m%C3%A9thodologie-agile-scrum">Méthodologie Agile Scrum</a>  </li>
+<li><a href="#5-organisation-temporelle-6-mois">Organisation temporelle (6 mois)</a>  </li>
+<li><a href="#6-cartographie-epics--releases">Cartographie Épics ↔ Releases</a>  </li>
+<li><a href="#7-d%C3%A9tail-des-sprints-mode-entreprise">Détail des sprints (mode entreprise)</a>  </li>
+<li><a href="#8-gestion-des-risques-et-qualit%C3%A9">Gestion des risques et qualité</a>  </li>
+<li><a href="#9-indicateurs-kpi-et-cl%C3%B4ture">Indicateurs (KPI) et clôture</a>  </li>
+<li><a href="#10-annexes">Annexes</a></li>
+</ol>
+<hr>
+<h2>1. Résumé exécutif</h2>
+<p>Ce rapport propose une <strong>découpage logique</strong> du développement d’une <strong>plateforme e-commerce de type marketplace</strong> (clients, vendeurs, administrateurs) selon la <strong>méthode Agile Scrum</strong>, sur une <strong>durée de six mois</strong> (janvier à juin 2025).</p>
+<p>Les principes retenus :</p>
+<ul>
+<li><strong>Un Epic majeur par mois</strong>, assimilé à une <strong>release</strong> (livraison incrémentale utilisable).  </li>
+<li><strong>Deux sprints par mois</strong> de <strong>deux semaines</strong> chacun → <strong>12 sprints</strong> sur l’ensemble de la période.  </li>
+<li>Chaque sprint est décrit <strong>comme en entreprise</strong> : objectifs, backlog, cérémonies, livrables et critères de fin (Definition of Done).</li>
+</ul>
+<p>Le périmètre fonctionnel s’appuie sur les modules réellement présents dans le dépôt (authentification, catalogue, panier, commandes, avis, suivi de vendeurs, administration, tableau de bord, chat, etc.).</p>
+<hr>
+<h2>2. Contexte et périmètre du projet</h2>
+<h3>2.1 Vision produit</h3>
+<p>Offrir un <strong>marché en ligne</strong> où :</p>
+<ul>
+<li>Les <strong>clients</strong> parcourent un catalogue, consultent les boutiques des vendeurs, gèrent un panier, passent commande, laissent des avis et suivent des vendeurs.  </li>
+<li>Les <strong>vendeurs</strong> gèrent leurs produits, catégories propres à la boutique, commandes, commentaires et audience (abonnés).  </li>
+<li>Les <strong>administrateurs</strong> supervisent utilisateurs, marchés, catégories globales, commandes/commentaires selon les écrans prévus et assurent la cohérence de la plateforme.</li>
+</ul>
+<h3>2.2 Acteurs (personas)</h3>
+<table>
+<thead>
+<tr>
+<th>Acteur</th>
+<th>Besoins principaux</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Client</td>
+<td>Découverte, confiance (avis), panier fluide, checkout, compte</td>
+</tr>
+<tr>
+<td>Vendeur</td>
+<td>CRUD produits, visibilité, relation client (commentaires), suivi des ventes</td>
+</tr>
+<tr>
+<td>Admin</td>
+<td>Gouvernance, modération, statistiques, paramétrage</td>
+</tr>
+</tbody></table>
+<h3>2.3 Hors périmètre (exemples à cadrer en début de projet)</h3>
+<ul>
+<li>Moyens de paiement réels (intégration bancaire PCI-DSS) si non requis académiquement — souvent <strong>simulé</strong> en phase projet.  </li>
+<li>SLA production 24/7, sauvegarde externalisée — à traiter en fin de cycle ou hors scope.</li>
+</ul>
+<hr>
+<h2>3. Architecture technique (synthèse)</h2>
+<table>
+<thead>
+<tr>
+<th>Couche</th>
+<th>Technologie</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Front-end</td>
+<td>Vue.js 3, Vue Router, Bootstrap</td>
+<td>UI, navigation par rôles (layouts Auth / Default / Admin / Seller)</td>
+</tr>
+<tr>
+<td>Back-end</td>
+<td>NestJS, TypeORM</td>
+<td>API REST, modules métier</td>
+</tr>
+<tr>
+<td>Base de données</td>
+<td>MySQL</td>
+<td>Persistance entités (utilisateur, catégorie, produit, panier, commande, avis, etc.)</td>
+</tr>
+<tr>
+<td>Transversal</td>
+<td>JWT / auth, upload, mail, i18n</td>
+<td>Sécurité, médias, notifications, internationalisation</td>
+</tr>
+</tbody></table>
+<p>Cette architecture justifie un découpage en <strong>Epics</strong> alignés sur les <strong>modules backend</strong> et les <strong>parcours utilisateur front</strong>.</p>
+<hr>
+<h2>4. Méthodologie Agile Scrum</h2>
+<h3>4.1 Rôles Scrum (adaptation projet étudiant / petite équipe)</h3>
+<table>
+<thead>
+<tr>
+<th>Rôle</th>
+<th>Responsabilité</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Product Owner (PO)</strong></td>
+<td>Priorise le backlog, valide les releases, rédige les user stories</td>
+</tr>
+<tr>
+<td><strong>Scrum Master</strong></td>
+<td>Facilite les rituels, enlève les blocages, protège l’équipe</td>
+</tr>
+<tr>
+<td><strong>Équipe de développement</strong></td>
+<td>Implémentation, tests, documentation technique</td>
+</tr>
+</tbody></table>
+<p><em>En contexte ING2, un même étudiant peut cumuler développeur et PO sur un mini-projet ; en équipe, la répartition est recommandée.</em></p>
+<h3>4.2 Artefacts Scrum</h3>
+<ul>
+<li><strong>Product Backlog</strong> : liste ordonnée de fonctionnalités et corrections.  </li>
+<li><strong>Sprint Backlog</strong> : sous-ensemble du backlog engagé pour le sprint courant.  </li>
+<li><strong>Incrément</strong> : version potentiellement livrable à la fin de chaque sprint.</li>
+</ul>
+<h3>4.3 Cérémonies (rythme bi-hebdomadaire)</h3>
+<table>
+<thead>
+<tr>
+<th>Cérémonie</th>
+<th>Durée indicative</th>
+<th>Objectif</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Sprint Planning</strong></td>
+<td>2–4 h</td>
+<td>Choisir les items, découper en tâches, estimer</td>
+</tr>
+<tr>
+<td><strong>Daily Scrum</strong></td>
+<td>15 min / jour</td>
+<td>Synchronisation : hier / aujourd’hui / blocages</td>
+</tr>
+<tr>
+<td><strong>Sprint Review</strong></td>
+<td>1–2 h</td>
+<td>Démo de l’incrément aux parties prenantes</td>
+</tr>
+<tr>
+<td><strong>Rétrospective</strong></td>
+<td>1 h</td>
+<td>Amélioration continue du processus</td>
+</tr>
+</tbody></table>
+<h3>4.4 Definition of Done (exemple projet)</h3>
+<p>Une user story est « terminée » lorsque :</p>
+<ol>
+<li>Le code est <strong>revu</strong> (pair review ou auto-checklist).  </li>
+<li>Les <strong>tests</strong> manuels ou automatisés couvrent le cas nominal et un cas d’erreur.  </li>
+<li>L’API est <strong>documentée</strong> (Swagger ou README module) si nouvelle route.  </li>
+<li>La <strong>build</strong> front et back passe sans erreur.  </li>
+<li>La fonctionnalité est <strong>démontrable</strong> en environnement de staging / local unifié.</li>
+</ol>
+<hr>
+<h2>5. Organisation temporelle (6 mois)</h2>
+<p><strong>Hypothèse</strong> : sprints de <strong>14 jours</strong> (2 semaines ouvrées).</p>
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th>Sprints</th>
+<th>Fenêtre indicative</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Janvier 2025</td>
+<td>Sprint 1, Sprint 2</td>
+<td>S1–S4</td>
+</tr>
+<tr>
+<td>Février 2025</td>
+<td>Sprint 3, Sprint 4</td>
+<td>S5–S8</td>
+</tr>
+<tr>
+<td>Mars 2025</td>
+<td>Sprint 5, Sprint 6</td>
+<td>S9–S12</td>
+</tr>
+<tr>
+<td>Avril 2025</td>
+<td>Sprint 7, Sprint 8</td>
+<td>S13–S16</td>
+</tr>
+<tr>
+<td>Mai 2025</td>
+<td>Sprint 9, Sprint 10</td>
+<td>S17–S20</td>
+</tr>
+<tr>
+<td>Juin 2025</td>
+<td>Sprint 11, Sprint 12</td>
+<td>S21–S24</td>
+</tr>
+</tbody></table>
+<p><em>Les dates exactes de début de Sprint 1 doivent être fixées le premier jour du projet (ex. lundi 6 janvier 2025).</em></p>
+<hr>
+<h2>6. Cartographie Epics ↔ Releases</h2>
+<p>Chaque <strong>Epic</strong> correspond à une <strong>release mensuelle</strong> (objectif métier majeur livré ou consolidé à la fin du mois).</p>
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th>Epic / Release</th>
+<th>Thème</th>
+<th>Modules / domaines principaux</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Janvier</strong></td>
+<td><strong>R1 – Fondations &amp; identité</strong></td>
+<td>Socle technique, auth, utilisateurs et rôles</td>
+<td>NestJS app, Auth, User, DB, Vue layouts, Sign-in / Sign-up / reset password, garde de routes</td>
+</tr>
+<tr>
+<td><strong>Février</strong></td>
+<td><strong>R2 – Catalogue &amp; offre vendeur</strong></td>
+<td>Catégories, produits, médias</td>
+<td>Category, Product, Image, Upload, vues Catalog, Shop, CRUD vendeur</td>
+</tr>
+<tr>
+<td><strong>Mars</strong></td>
+<td><strong>R3 – Panier &amp; commandes</strong></td>
+<td>Parcours d’achat</td>
+<td>Cart, Order, vues Cart, Checkout</td>
+</tr>
+<tr>
+<td><strong>Avril</strong></td>
+<td><strong>R4 – Confiance &amp; engagement</strong></td>
+<td>Avis, liste de souhaits, social</td>
+<td>Review, WishList, Seller Follow, pages profil / suivis</td>
+</tr>
+<tr>
+<td><strong>Mai</strong></td>
+<td><strong>R5 – Pilotage &amp; administration</strong></td>
+<td>Back-office et supervision</td>
+<td>Dashboard admin, gestion marchés / clients / vendeurs, commentaires admin, paramètres</td>
+</tr>
+<tr>
+<td><strong>Juin</strong></td>
+<td><strong>R6 – Différenciation &amp; industrialisation</strong></td>
+<td>Chat, i18n, qualité, livraison</td>
+<td>Chat (assistant), vue-i18n, tests de bout en bout, doc utilisateur, préparation déploiement</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Détail des sprints (mode entreprise)</h2>
+<p>Pour chaque mois, <strong>Sprint A</strong> = semaines 1–2, <strong>Sprint B</strong> = semaines 3–4.<br>Les <strong>user stories</strong> sont formulées au format : <em>En tant que …, je veux … afin de …</em>.</p>
+<hr>
+<h3>Epic R1 – Janvier 2025 · Fondations &amp; identité</h3>
+<h4>Sprint 1 (semaines 1–2)</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif sprint</strong></td>
+<td>Monorepo / deux dépôts opérationnels, CI basique, première API « health », modèle utilisateur et auth minimale</td>
+</tr>
+<tr>
+<td><strong>User stories (exemples)</strong></td>
+<td>US1.1 : En tant qu’équipe technique, je veux un dépôt back configuré avec TypeORM et MySQL afin de persister les données. · US1.2 : En tant que client, je veux créer un compte avec rôle afin d’accéder aux fonctionnalités adaptées. · US1.3 : En tant qu’utilisateur, je veux me connecter avec JWT afin d’accéder aux routes protégées.</td>
+</tr>
+<tr>
+<td><strong>Tâches techniques</strong></td>
+<td>Schéma User ; endpoints register/login ; middleware JWT ; <code>.env.example</code> ; CORS</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>API auth fonctionnelle ; écran Sign-in / Sign-up branché ; document d’installation</td>
+</tr>
+<tr>
+<td><strong>Démo review</strong></td>
+<td>Création compte + login + accès route protégée (Postman + UI)</td>
+</tr>
+</tbody></table>
+<h4>Sprint 2 (semaines 3–4)</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif sprint</strong></td>
+<td>Finaliser rôles (client / seller / admin), redirections Vue Router, mot de passe oublié si scope</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US1.4 : En tant qu’admin, je veux être redirigé vers le dashboard admin après login. · US1.5 : En tant que vendeur, je veux accéder à l’espace vendeur sans voir l’admin. · US1.6 : En tant qu’utilisateur, je veux réinitialiser mon mot de passe (flux mail ou code).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Matrice de droits documentée ; layouts Auth / Default ; reset password intégré si prévu</td>
+</tr>
+<tr>
+<td><strong>Fin de release R1</strong></td>
+<td>Authentification bout-en-bout utilisable pour les Epics suivants</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Epic R2 – Février 2025 · Catalogue &amp; offre vendeur</h3>
+<h4>Sprint 3</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Catégories globales (admin) et navigation catalogue côté client</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US2.1 : Admin crée/modifie des catégories. · US2.2 : Client parcourt le catalogue filtré par catégorie. · US2.3 : Affichage page détail produit (ShopSingle).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>CRUD catégories API + UI admin ; page Catalog</td>
+</tr>
+</tbody></table>
+<h4>Sprint 4</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>CRUD produits vendeur, images, page boutique vendeur</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US2.4 : Vendeur crée un produit avec prix et stock. · US2.5 : Upload d’images produit (Cloudinary ou service interne). · US2.6 : Client visite la page marché d’un vendeur (MarketPage).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Module Product + Image + Upload ; liste/ajout/édition produits vendeur</td>
+</tr>
+<tr>
+<td><strong>Fin R2</strong></td>
+<td>Catalogue exploitable avec au moins un parcours client complet jusqu’au détail produit</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Epic R3 – Mars 2025 · Panier &amp; commandes</h3>
+<h4>Sprint 5</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Panier persistant (utilisateur connecté ou stratégie choisie)</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US3.1 : Client ajoute des articles au panier. · US3.2 : Client modifie quantités. · US3.3 : Client supprime un article.</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Cart module API ; vue Cart</td>
+</tr>
+</tbody></table>
+<h4>Sprint 6</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Passage de commande et suivi statut minimal</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US3.4 : Client valide une commande depuis le panier. · US3.5 : Vendeur ou système enregistre la commande avec lignes. · US3.6 : Affichage historique (seller orders list).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Order + OrderItem ; checkout ; liste commandes vendeur</td>
+</tr>
+<tr>
+<td><strong>Fin R3</strong></td>
+<td>Parcours d’achat de bout en bout (même si paiement simulé)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Epic R4 – Avril 2025 · Confiance &amp; engagement</h3>
+<h4>Sprint 7</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Avis produits et modération côté vendeur</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US4.1 : Client laisse une note/commentaire. · US4.2 : Vendeur consulte les commentaires (UserComments). · US4.3 : Admin modère si prévu.</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Module Review ; intégration ShopSingle</td>
+</tr>
+</tbody></table>
+<h4>Sprint 8</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Wishlist, suivi de vendeurs, profils</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US4.4 : Client gère une liste de souhaits. · US4.5 : Client suit un vendeur (FollowingMarket). · US4.6 : Client consulte/édite son profil.</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Seller-follow API ; vues WishList, Following, Profile</td>
+</tr>
+<tr>
+<td><strong>Fin R4</strong></td>
+<td>Boucle d’engagement utilisateur complète</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Epic R5 – Mai 2025 · Pilotage &amp; administration</h3>
+<h4>Sprint 9</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Tableaux de bord et vue d’ensemble admin</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US5.1 : Admin visualise indicateurs clés (Dashboard / OverviewAdmin). · US5.2 : Admin liste vendeurs et clients.</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Module dashboard backend ; écrans admin consolidés</td>
+</tr>
+</tbody></table>
+<h4>Sprint 10</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Gestion marchés, catégories, paramètres, commentaires admin</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US5.3 : CRUD marchés. · US5.4 : Modération commentaires (AdminComments). · US5.5 : Paramètres plateforme (SettingAdmin).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Parcours admin cohérent avec la doc des rôles</td>
+</tr>
+<tr>
+<td><strong>Fin R5</strong></td>
+<td>Gouvernance opérationnelle pour un environnement pilote</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Epic R6 – Juin 2025 · Différenciation &amp; industrialisation</h3>
+<h4>Sprint 11</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Chat / assistant, cohérence UX (widget), internationalisation</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US6.1 : Utilisateur pose une question via le widget chat. · US6.2 : Support FR/AR (ou langues du projet) via vue-i18n.</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Chat module ; composant AsmadChatWidget ; fichiers i18n</td>
+</tr>
+</tbody></table>
+<h4>Sprint 12</h4>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Objectif</strong></td>
+<td>Tests E2E ciblés, correction bugs, documentation, préparation release finale</td>
+</tr>
+<tr>
+<td><strong>User stories</strong></td>
+<td>US6.3 : Jeux de tests manuels par parcours critique. · US6.4 : Guide de déploiement. · US6.5 : Revue sécurité basique (JWT, upload).</td>
+</tr>
+<tr>
+<td><strong>Livrables</strong></td>
+<td>Tag de version v1.0 ; README ; rapport de fin de projet</td>
+</tr>
+<tr>
+<td><strong>Fin R6</strong></td>
+<td><strong>Release candidate</strong> prête pour soutenance / démo</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Gestion des risques et qualité</h2>
+<table>
+<thead>
+<tr>
+<th>Risque</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Retard sur l’auth</td>
+<td>Bloque tout le reste</td>
+<td>Prioriser Epic R1 ; feature freeze sur le scope secondaire</td>
+</tr>
+<tr>
+<td>Complexité upload / Cloudinary</td>
+<td>Médias instables</td>
+<td>Spike technique en début de Sprint 4</td>
+</tr>
+<tr>
+<td>Scope commandes / paiement</td>
+<td>Attentes irréalistes</td>
+<td>Paiement « mock » documenté pour le jury</td>
+</tr>
+<tr>
+<td>Dette technique</td>
+<td>Ralentissement fin de période</td>
+<td>Rétrospectives honnêtes ; refactors localisés</td>
+</tr>
+</tbody></table>
+<p><strong>Stratégie de test</strong> : tests unitaires sur services NestJS critiques ; tests manuels par user journey ; checklist de non-régression avant chaque review de sprint.</p>
+<hr>
+<h2>9. Indicateurs (KPI) et clôture</h2>
+<p>Indicateurs simples adaptés à un projet académique :</p>
+<ul>
+<li><strong>Vélocité</strong> : nombre de story points réalisés par sprint (après 3 sprints, ajuster le planning).  </li>
+<li><strong>Taux de Done</strong> : % des stories du sprint réellement « Done » en fin de sprint.  </li>
+<li><strong>Bugs ouverts</strong> : nombre de défauts critiques non résolus (objectif : 0 en fin de release).  </li>
+<li><strong>Couverture des parcours</strong> : % des parcours persona couverts par une démo.</li>
+</ul>
+<p><strong>Clôture juin 2025</strong> : livraison du backlog prioritaire, rapport de bilan, démo finale, transfert de connaissance (README, variables d’environnement).</p>
+<hr>
+<h2>10. Annexes</h2>
+<h3>Annexe A – Glossaire rapide</h3>
+<ul>
+<li><strong>Epic</strong> : grande fonctionnalité métier, découpée en stories.  </li>
+<li><strong>Release</strong> : version livrée aux utilisateurs ou au jury, avec numéro de version.  </li>
+<li><strong>Sprint</strong> : itération courte avec objectif clair et incrément livrable.  </li>
+<li><strong>INVEST</strong> : critères pour de bonnes user stories (Indépendante, Négociable, Valuable, Estimable, Small, Testable).</li>
+</ul>
+<h3>Annexe B – Exemple de tableau Kanban (colonnes)</h3>
+<p>Backlog produit → À faire sprint → En cours → En revue → Terminé.</p>
+<h3>Annexe C – Référence au code (périmètre routé)</h3>
+<p>Parcours identifiés dans le routeur Vue : accueil, catalogue, wishlist, suivis, fiche produit, page marché, panier, checkout, profil ; espaces admin (dashboard, vendeurs, clients, marchés, catégories, commentaires, paramètres) ; espace vendeur (produits, catégories vendeur, commandes, abonnés, commentaires).</p>
+<hr>
+<p><strong>Fin du rapport</strong></p>
+<p><em>Pour export PDF : ouvrir ce fichier dans un éditeur Markdown compatible (VS Code + extension Markdown PDF) ou utiliser Pandoc / impression « Enregistrer au format PDF » depuis le navigateur si converti en HTML.</em></p>

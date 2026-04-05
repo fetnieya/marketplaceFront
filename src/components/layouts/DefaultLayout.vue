@@ -1,23 +1,33 @@
 <template>
   <div class="default-layout">
     <AppHeader />
-    <main>
+    <main class="default-layout-main">
       <slot/> <!-- This allows dynamic content to be inserted -->
     </main>
-   <AppFooter/>
+    <AppFooter />
+    <AsmadChatWidget />
   </div>
 </template>
 
 <script>
 import AppHeader from '../AppHeader.vue'
 import AppFooter from '../AppFooter.vue'
+import AsmadChatWidget from '../AsmadChatWidget.vue'
 
 export default {
   name: 'DefaultLayout',
   components: {
     AppHeader,
-    AppFooter
-  },
+    AppFooter,
+    AsmadChatWidget
+  }
 }
 </script>
+
+<style scoped>
+/* Évite que le contenu (titres, fil d’Ariane) passe sous la navbar fixed-top */
+.default-layout-main {
+  padding-top: var(--asmad-fixed-navbar-height, 7.75rem);
+}
+</style>
 

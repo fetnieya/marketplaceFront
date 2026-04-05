@@ -18,18 +18,8 @@
           />
         </div>
 
-        <!-- Number input -->
-        <div class="mb-3">
-          <label for="number-input" class="form-label">Number of Products</label>
-          <input
-            class="form-control"
-            type="number"
-            id="number-input"
-            v-model="category.numberOfProducts"
-            placeholder="Enter number of products"
-            required
-          />
-        </div>
+        <!-- Number input - Hidden as it's auto-incremented -->
+        <input type="hidden" v-model="category.numberOfProducts" />
 
         <!-- Textarea -->
         <div class="form-floating mb-3">
@@ -60,6 +50,7 @@
 
 <script>
 import axios from 'axios';
+import { toast } from '@/utils/toast';
 
 export default {
   name: "AddCategory",
@@ -67,7 +58,6 @@ export default {
     return {
       category: {
         label: "",
-        numberOfProducts: 0,
         description: "",
       },
     };
@@ -75,7 +65,7 @@ export default {
   methods: {
     async addCategory() {
       if (!this.category.label || !this.category.description) {
-        alert("Label and Description are required");
+        toast.warning("Le label et la description sont requis");
         return;
       }
 
@@ -88,10 +78,11 @@ export default {
         });
 
         console.log("Category added successfully:", response.data);
+        toast.success("Catégorie ajoutée avec succès");
         this.$router.push("/category"); // Redirect to the category list page
       } catch (error) {
         console.error("Error adding category:", error);
-        alert("Error adding category. Please try again.");
+        toast.error("Erreur lors de l'ajout de la catégorie. Veuillez réessayer.");
       }
     },
   },

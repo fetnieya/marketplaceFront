@@ -42,7 +42,7 @@
         <!-- Copyright -->
         <p class="nav w-100 fs-sm pt-5 mt-auto mb-5" style="max-width: 526px;">
           <span class="text-body-secondary">&copy; All rights reserved. Made by</span>
-          <a class="nav-link d-inline-block p-0 ms-1" href="https://localscope.dev/" target="_blank" rel="noopener">Localscope Software</a>
+          <span class="nav-link d-inline-block p-0 ms-1">Eya Fetni</span>
         </p>
       </div>
     </main>

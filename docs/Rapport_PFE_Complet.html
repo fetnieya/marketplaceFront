@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapport PFE - Projet Marketplace</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: "default" });</script>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 32px; line-height: 1.5; color: #1f2937; }
+    h1, h2, h3, h4 { color: #111827; margin-top: 1.2em; }
+    h1 { text-align: center; margin-top: 0; }
+    .meta, .cover { text-align: center; }
+    .cover { page-break-after: always; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 14px; }
+    th, td { border: 1px solid #d1d5db; padding: 8px; vertical-align: top; }
+    th { background: #f3f4f6; text-align: left; }
+    .toc li { margin: 4px 0; }
+    .caption { font-size: 13px; color: #4b5563; margin-top: 4px; }
+    .placeholder { border: 1px dashed #9ca3af; padding: 14px; color: #6b7280; margin: 10px 0; }
+    .page-break { page-break-before: always; }
+    @media print {
+      body { margin: 18mm; }
+      .page-break { page-break-before: always; }
+      table, .mermaid { page-break-inside: avoid; }
+      h2, h3 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <h1>Projet de Fin d'Etudes</h1>
+    <h2>Conception et Realisation d'un Projet Marketplace Multi-acteurs</h2>
+    <p class="meta"><strong>Etudiant :</strong> [Votre nom]</p>
+    <p class="meta"><strong>Encadrant academique :</strong> [Nom]</p>
+    <p class="meta"><strong>Encadrant entreprise :</strong> [Nom]</p>
+    <p class="meta"><strong>Annee universitaire :</strong> 2025 - 2026</p>
+  </section>
+
+  <h2>Resume</h2>
+  <p>
+    Ce rapport presente la realisation complete d'une plateforme marketplace multi-acteurs, organisee en trois releases.
+    La release 1 couvre l'authentification et la gestion des utilisateurs, la release 2 couvre la gestion metier ecommerce
+    (produits, panier, commandes, avis), et la release 3 couvre le module IA ainsi que le pilotage avance de la plateforme.
+  </p>
+
+  <h2>Table des matieres</h2>
+  <ol class="toc">
+    <li>Introduction generale</li>
+    <li>Methodologie Agile Scrum</li>
+    <li>Realisation de la 1ere Release</li>
+    <li>Realisation de la 2eme Release</li>
+    <li>Release 3 : Module IA et Pilotage Avance</li>
+    <li>Conclusion generale</li>
+    <li>Annexes</li>
+  </ol>
+
+  <div class="page-break"></div>
+  <h2>Introduction generale</h2>
+  <p>
+    La transformation numerique du commerce en ligne impose des solutions capables de centraliser l'information, de simplifier
+    les interactions entre acteurs et d'ameliorer la prise de decision. Ce projet propose une marketplace complete,
+    evolutive et integree, avec un socle web moderne (frontend Vue + backend NestJS), des modules metier riches et une couche
+    d'intelligence artificielle.
+  </p>
+
+  <h2>Methodologie Agile Scrum</h2>
+  <table>
+    <thead>
+      <tr><th>Element</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cadence</td><td>3 Releases, 6 Sprints, livraison incrementale</td></tr>
+      <tr><td>Roles</td><td>Product Owner, Scrum Master, Equipe de developpement</td></tr>
+      <tr><td>Ceremonies</td><td>Planning, Daily, Review, Retrospective</td></tr>
+      <tr><td>Artefacts</td><td>Product Backlog, Sprint Backlog, Increment, Definition of Done</td></tr>
+    </tbody>
+  </table>
+
+  <div class="mermaid">
+flowchart LR
+  PB[Product Backlog] --> SP1[Sprint 1]
+  PB --> SP2[Sprint 2]
+  PB --> SP3[Sprint 3]
+  PB --> SP4[Sprint 4]
+  PB --> SP5[Sprint 5]
+  PB --> SP6[Sprint 6]
+  SP1 --> R1[Release 1]
+  SP2 --> R1
+  SP3 --> R2[Release 2]
+  SP4 --> R2
+  SP5 --> R3[Release 3]
+  SP6 --> R3
+  </div>
+  <p class="caption">Figure 1 - Enchainement Scrum (Backlog, Sprints, Releases)</p>
+
+  <div class="page-break"></div>
+  <h2>3. Realisation de la 1ere Release</h2>
+  <h3>3.1 Introduction</h3>
+  <p>
+    Cette release etablit le socle du projet : authentification securisee, gestion des utilisateurs et administration initiale.
+  </p>
+
+  <h3>3.2 Backlog de produit du Release 1</h3>
+  <table>
+    <thead>
+      <tr><th>Epic</th><th>User stories principales</th><th>Priorite</th><th>Statut</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>R1-E1 Authentification</td><td>Inscription, connexion, roles, reset password</td><td>Haute</td><td>Termine</td></tr>
+      <tr><td>R1-E2 Utilisateurs/Admin</td><td>Gestion comptes, categories, dashboard initial</td><td>Haute</td><td>Termine</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 Diagramme de cas d'utilisation global du Release 1</h3>
+  <div class="mermaid">
+flowchart TB
+  V[Visiteur] --> UC1[Inscription]
+  V --> UC2[Connexion]
+  C[Client] --> UC3[Gerer profil]
+  S[Vendeur] --> UC4[Acceder espace vendeur]
+  A[Admin] --> UC5[Gerer utilisateurs]
+  A --> UC6[Gerer categories]
+  </div>
+  <p class="caption">Figure 2 - Cas d'utilisation global Release 1</p>
+
+  <h3>3.4 Sprint 1 : Authentification et gestion des utilisateurs</h3>
+  <h4>3.4.1 Objectifs du Sprint 1</h4>
+  <ul>
+    <li>Mettre en place un flux d'authentification complet et securise.</li>
+    <li>Integrer la gestion des permissions par roles.</li>
+    <li>Assurer la protection des routes frontend/backend.</li>
+  </ul>
+
+  <h4>3.4.2 Diagramme de cas d'utilisation general du sprint 1</h4>
+  <div class="mermaid">
+sequenceDiagram
+  actor U as Utilisateur
+  participant F as Frontend
+  participant B as Backend Auth
+  U->>F: Saisir email / mot de passe
+  F->>B: POST /auth/login
+  B-->>F: JWT + role
+  F-->>U: Redirection selon role
+  </div>
+  <p class="caption">Figure 3 - Sequence de connexion Sprint 1</p>
+
+  <h4>3.4.3 Analyse et conception du Sprint 1</h4>
+  <table>
+    <thead>
+      <tr><th>Aspect</th><th>Conception</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Backend</td><td>AuthModule, DTO validation, JWT, protections rolees</td></tr>
+      <tr><td>Frontend</td><td>SignIn, SignUp, guards router, redirection par role</td></tr>
+      <tr><td>Donnees</td><td>Entite User (email, password hash, role, metadonnees)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>3.4.4 Realisation du Sprint 1</h4>
+  <p>Endpoints d'authentification implementes, ecrans integres et tests manuels realises sur les parcours critiques.</p>
+
+  <h3>3.5 Sprint 2 : Administration de base et gestion des categories</h3>
+  <h4>3.5.1 Objectifs du Sprint 2</h4>
+  <ul>
+    <li>Structurer l'espace administrateur de la plateforme.</li>
+    <li>Mettre en place le CRUD des categories globales.</li>
+    <li>Preparer les ecrans de supervision admin (utilisateurs, vendeurs, clients).</li>
+  </ul>
+
+  <h4>3.5.2 Diagramme de cas d'utilisation du sprint 2</h4>
+  <div class="mermaid">
+flowchart LR
+  A2[Administrateur] --> C1[Ajouter categorie]
+  A2 --> C2[Modifier categorie]
+  A2 --> C3[Supprimer categorie]
+  A2 --> U1[Consulter utilisateurs]
+  A2 --> D1[Consulter dashboard admin]
+  </div>
+  <p class="caption">Figure 4 - Cas d'utilisation Sprint 2</p>
+
+  <h4>3.5.3 Analyse et conception du Sprint 2</h4>
+  <table>
+    <thead>
+      <tr><th>Module</th><th>Details</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Category</td><td>Modeles categorie, endpoints CRUD, validation create/update</td></tr>
+      <tr><td>Administration</td><td>Pages admin (dashboard, users, sellers, clients) et controles d'acces</td></tr>
+    </tbody>
+  </table>
+
+  <h4>3.5.4 Realisation du sprint 2</h4>
+  <p>Interface admin consolidee, gestion des categories operationnelle et parcours de supervision valides.</p>
+  <h3>3.6 Conclusion</h3>
+  <p>La release 1 a valide les fondations fonctionnelles et techniques de la plateforme.</p>
+
+  <div class="page-break"></div>
+  <h2>4. Realisation de la 2eme Release</h2>
+  <h3>4.1 Introduction</h3>
+  <p>La release 2 couvre le coeur business ecommerce : catalogue, panier, commandes, avis et engagement utilisateur.</p>
+
+  <h3>4.2 Backlog de produit du Release 2</h3>
+  <table>
+    <thead><tr><th>Epic</th><th>User stories principales</th><th>Priorite</th><th>Statut</th></tr></thead>
+    <tbody>
+      <tr><td>R2-E1 Produits/Catalogue</td><td>CRUD vendeur, consultation client, fiche produit</td><td>Haute</td><td>Termine</td></tr>
+      <tr><td>R2-E2 Achat/Engagement</td><td>Panier, checkout, commandes, avis, wishlist, follow</td><td>Haute</td><td>Termine</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.3 Diagramme de cas d'utilisation du release 2</h3>
+  <div class="mermaid">
+flowchart TB
+  C3[Client] --> C31[Consulter produit]
+  C3 --> C32[Ajouter au panier]
+  C3 --> C33[Passer commande]
+  C3 --> C34[Laisser avis]
+  V3[Vendeur] --> V31[Gerer produits]
+  A3[Admin] --> A31[Superviser activite]
+  </div>
+  <p class="caption">Figure 5 - Cas d'utilisation global Release 2</p>
+
+  <h3>4.4 Sprint 3 : Gestion des produits et visualisation catalogue</h3>
+  <h4>4.4.1 Objectif du sprint 3</h4>
+  <p>Rendre le catalogue pleinement exploitable et permettre le CRUD complet des produits cote vendeur.</p>
+  <h4>4.4.2 Diagramme de cas d'utilisation du sprint 3</h4>
+  <div class="mermaid">
+flowchart LR
+  V4[Vendeur] --> A1[Ajouter produit]
+  V4 --> A2[Modifier produit]
+  V4 --> A3[Supprimer produit]
+  C4[Client] --> A4[Voir detail produit]
+  </div>
+  <h4>4.4.3 Analyse et conception du sprint 3</h4>
+  <table>
+    <thead><tr><th>Composant</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td>ProductModule, DTO create/update, upload image</td></tr>
+      <tr><td>Frontend</td><td>ProductsList, AddProduct, EditProduct, Catalog, ShopSingle</td></tr>
+      <tr><td>Qualite</td><td>Validation champs, erreurs API, coherence stock/prix</td></tr>
+    </tbody>
+  </table>
+  <h4>4.4.4 Realisation du sprint 3</h4>
+  <p>Module produit operationnel avec affichage catalogue et liaison complete frontend-backend.</p>
+
+  <h3>4.5 Sprint 4 : Panier, commandes, avis et engagement utilisateur</h3>
+  <h4>4.5.1 Objectif du sprint 4</h4>
+  <p>Construire un parcours d'achat complet, puis renforcer la confiance utilisateur via avis et suivi vendeur.</p>
+  <h4>4.5.2 Diagramme de cas d'utilisation du sprint 4</h4>
+  <div class="mermaid">
+stateDiagram-v2
+  [*] --> Catalogue
+  Catalogue --> Panier: Ajouter article
+  Panier --> Checkout: Valider panier
+  Checkout --> Commande: Confirmer
+  Commande --> Avis: Evaluer produit
+  Avis --> [*]
+  </div>
+  <h4>4.5.3 Analyse et conception du sprint 4</h4>
+  <table>
+    <thead><tr><th>Module</th><th>Entites / vues</th></tr></thead>
+    <tbody>
+      <tr><td>Panier</td><td>CartModule, CartItem, Cart.vue</td></tr>
+      <tr><td>Commande</td><td>OrderModule, Order, OrderItem, checkout.vue</td></tr>
+      <tr><td>Engagement</td><td>ReviewModule, SellerFollowModule, WishList.vue, FollowingMarket.vue</td></tr>
+    </tbody>
+  </table>
+  <h4>4.5.4 Realisation du sprint 4</h4>
+  <p>Workflow checkout et commande valide, modules avis/suivi integres, scenarios E2E verifies.</p>
+  <h3>4.6 Conclusion</h3>
+  <p>La release 2 a etabli la valeur metier principale de la marketplace avec un cycle d'achat complet.</p>
+
+  <div class="page-break"></div>
+  <h2>5. Release 3 : Module IA et Pilotage Avance</h2>
+  <h3>5.1 Introduction</h3>
+  <p>La release 3 combine innovation fonctionnelle (assistant intelligent) et pilotage avance (dashboard, suivi commandes, engagement client).</p>
+
+  <h3>5.2 Backlog de produit du Release 3</h3>
+  <table>
+    <thead><tr><th>Epic</th><th>User stories principales</th><th>Priorite</th><th>Statut</th></tr></thead>
+    <tbody>
+      <tr><td>R3-E1 Assistant IA</td><td>Question/reponse, aide contextuelle, experience chat</td><td>Moyenne/Haute</td><td>Termine</td></tr>
+      <tr><td>R3-E2 Pilotage et engagement</td><td>Dashboard admin, suivi vendeurs/clients, avis et fidelisation</td><td>Haute</td><td>Termine</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.3 Sprint 5 : Module IA - Assistant Marketplace Intelligent</h3>
+  <h4>5.3.1 Objectifs du sprint</h4>
+  <ul>
+    <li>Fournir une assistance conversationnelle intelligente.</li>
+    <li>Repondre aux questions sur le catalogue et le contexte utilisateur.</li>
+    <li>Garantir une integration stable front-back.</li>
+  </ul>
+  <h4>5.3.2 Diagramme de cas d'utilisation du sprint 5</h4>
+  <div class="mermaid">
+sequenceDiagram
+  actor U as Utilisateur
+  participant W as Widget Chat
+  participant API as Backend Chat
+  participant M as Modele IA
+  U->>W: Pose question
+  W->>API: POST /chat
+  API->>M: Prompt + contexte
+  M-->>API: Reponse
+  API-->>W: Message final
+  W-->>U: Affichage reponse
+  </div>
+  <h4>5.3.3 Presentation du modele Qwen2.5-72B</h4>
+  <p>Modele LLM utilise pour la comprehension contextuelle et la generation de reponses pertinentes.</p>
+  <h4>5.3.4 Developpement Backend - FastAPI (Python)</h4>
+  <p>API de chat, orchestrateur de prompts, validation, gestion des erreurs et timeout.</p>
+  <h4>5.3.5 Developpement Frontend - Angular</h4>
+  <p>Interface conversationnelle, affichage des messages, statut de traitement et historique.</p>
+  <h4>5.3.6 Architecture du module</h4>
+  <div class="mermaid">
+flowchart LR
+  FE[Frontend Chat] --> BE[API Chat]
+  BE --> LLM[Qwen2.5-72B]
+  BE --> LOG[(Historique / Logs)]
+  </div>
+  <h4>5.3.7 Etapes de realisation du sprint</h4>
+  <table>
+    <thead><tr><th>Etape</th><th>Contenu</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Definition des cas d'usage IA</td></tr>
+      <tr><td>2</td><td>Implementation API backend</td></tr>
+      <tr><td>3</td><td>Integration frontend</td></tr>
+      <tr><td>4</td><td>Tests fonctionnels et ajustements</td></tr>
+    </tbody>
+  </table>
+  <h4>5.3.8 Resultats obtenus</h4>
+  <p>Assistant operationnel et integre aux parcours utilisateur prioritaires.</p>
+  <h4>5.3.9 Captures a inserer</h4>
+  <div class="placeholder">Inserer Figure 5.9-a : Interface chat utilisateur</div>
+  <div class="placeholder">Inserer Figure 5.9-b : Exemple de question/reponse</div>
+  <div class="placeholder">Inserer Figure 5.9-c : Logs API chat</div>
+
+  <h3>5.4 Sprint 6 : Dashboard admin, suivi marketplace et engagement</h3>
+  <h4>5.4.1 Objectifs du sprint 6</h4>
+  <ul>
+    <li>Consolider les ecrans de pilotage administrateur.</li>
+    <li>Renforcer le suivi metier (clients, vendeurs, commandes, categories).</li>
+    <li>Finaliser les fonctionnalites d'engagement (avis, suivi vendeur, wishlist).</li>
+  </ul>
+  <h4>5.4.2 Modules backend concernes</h4>
+  <p>DashboardModule, ReviewModule, SellerFollowModule, ainsi que consolidation de UserModule et OrderModule.</p>
+  <h4>5.4.3 Ecrans frontend concernes</h4>
+  <p>OverviewAdmin, AdminDashboard, MarketsList, pages clients/vendeurs admin, WishList et FollowingMarket.</p>
+  <h4>5.4.4 Diagramme de flux de pilotage</h4>
+  <div class="mermaid">
+flowchart TB
+  A6[Admin] --> DA[Dashboard admin]
+  DA --> U6[Suivi utilisateurs]
+  DA --> S6[Suivi vendeurs]
+  DA --> O6[Suivi commandes]
+  C6[Client] --> W6[WishList]
+  C6 --> F6[Follow vendeur]
+  C6 --> R6[Avis produits]
+  </div>
+  <h4>5.4.5 Tests et verifications</h4>
+  <table>
+    <thead><tr><th>Verification</th><th>Resultat attendu</th></tr></thead>
+    <tbody>
+      <tr><td>Acces role admin</td><td>Pages de supervision accessibles uniquement a l'admin</td></tr>
+      <tr><td>Donnees dashboard</td><td>Indicateurs coherents avec les donnees metier</td></tr>
+      <tr><td>Avis/follow/wishlist</td><td>Fonctions d'engagement operationnelles cote client</td></tr>
+      <tr><td>Parcours global</td><td>Auth, catalogue, panier, commande et engagement OK</td></tr>
+    </tbody>
+  </table>
+  <h4>5.4.6 Resultats obtenus</h4>
+  <p>Pilotage admin consolide et experience marketplace complete pour les parcours de fidelisation utilisateur.</p>
+
+  <div class="page-break"></div>
+  <h2>Conclusion generale</h2>
+  <p>
+    Le projet a permis de livrer une solution complete et progressive : socle securise, coeur metier marketplace, puis
+    couche IA et pilotage avance. Cette demarche confirme la pertinence du decoupage Scrum en releases et sprints pour
+    maitriser les risques et fournir de la valeur continue.
+  </p>
+
+  <h2>Annexes</h2>
+  <h3>Annexe A - Planning global des sprints</h3>
+  <table>
+    <thead><tr><th>Mois</th><th>Sprint</th><th>Theme</th><th>Livrable principal</th></tr></thead>
+    <tbody>
+      <tr><td>Janvier</td><td>S1</td><td>Auth</td><td>Inscription/connexion securisee</td></tr>
+      <tr><td>Fevrier</td><td>S2</td><td>Admin</td><td>Gestion utilisateurs/categories</td></tr>
+      <tr><td>Mars</td><td>S3</td><td>Produits</td><td>CRUD produits + catalogue</td></tr>
+      <tr><td>Avril</td><td>S4</td><td>Achat</td><td>Panier, checkout, commandes</td></tr>
+      <tr><td>Mai</td><td>S5</td><td>IA</td><td>Assistant conversationnel</td></tr>
+      <tr><td>Juin</td><td>S6</td><td>Pilotage</td><td>Dashboard admin + engagement utilisateur</td></tr>
+    </tbody>
+  </table>
+
+  <div class="mermaid">
+gantt
+  title Planning global du projet PFE
+  dateFormat  YYYY-MM-DD
+  section Release 1
+  Sprint 1           :a1, 2025-01-06, 14d
+  Sprint 2           :a2, after a1, 14d
+  section Release 2
+  Sprint 3           :b1, 2025-03-03, 14d
+  Sprint 4           :b2, after b1, 14d
+  section Release 3
+  Sprint 5           :c1, 2025-05-05, 14d
+  Sprint 6           :c2, after c1, 14d
+  </div>
+  <p class="caption">Figure A1 - Diagramme de Gantt simplifie</p>
+
+</body>
+</html>

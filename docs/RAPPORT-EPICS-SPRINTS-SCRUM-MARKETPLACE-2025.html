@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rapport Agile Scrum — Marketplace (janv.–juin 2025)</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1a1a1a; max-width: 210mm; margin: 0 auto; padding: 12mm 10mm 20mm; }
+  h1 { font-size: 18pt; border-bottom: 2px solid #2c5282; padding-bottom: 6px; margin-top: 0; }
+  h2 { font-size: 14pt; color: #2c5282; margin-top: 1.4em; page-break-after: avoid; }
+  h3 { font-size: 12pt; margin-top: 1.2em; page-break-after: avoid; }
+  h4 { font-size: 11pt; margin-top: 1em; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: 10pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #cbd5e0; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #edf2f7; font-weight: 600; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 1.2em 0; }
+  ul, ol { margin: 0.4em 0; padding-left: 1.4em; }
+  .cover { text-align: center; padding: 28mm 12mm 20mm; page-break-after: always; }
+  .cover h1 { border: none; font-size: 22pt; }
+  .cover .sub { font-size: 14pt; color: #4a5568; margin-top: 8px; }
+  .meta { font-size: 10pt; color: #4a5568; margin-top: 24mm; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <h1>Rapport de planification Agile / Scrum</h1>
+  <p class="sub">Projet Marketplace multi-vendeurs<br>(front Vue.js · back NestJS)</p>
+  <p class="sub"><strong>Période : janvier – juin 2025 (6 mois)</strong></p>
+  <p class="meta">Document destiné à : rapport d’ingénierie (niveau ING2)<br>Version 1.1 · mars 2025</p>
+</div><p>﻿# Rapport de planification Agile / Scrum</p>
+<h2>Projet Marketplace multi-vendeurs (front Vue.js · back NestJS)</h2>
+<h3>Période : janvier – juin 2025 (6 mois)</h3>
+<hr>
+<p><strong>Document destiné à</strong> : rapport d’ingénierie (niveau ING2)
+<strong>Version</strong> : 1.1
+<strong>Date</strong> : mars 2025</p>
+<hr>
+<h2>1. Résumé exécutif</h2>
+<p>Ce rapport présente une planification Scrum réaliste de votre projet marketplace sur 6 mois, avec une structure simplifiée en <strong>4 epics</strong> et <strong>12 sprints</strong> (2 semaines chacun).</p>
+<p>Principe retenu :</p>
+<ul>
+<li><strong>4 epics métier</strong> alignés sur les grandes capacités du produit.</li>
+<li><strong>12 sprints</strong> au total (janvier à juin 2025).</li>
+<li><strong>3 sprints par epic</strong> pour garder un rythme constant et lisible.</li>
+<li>Une <strong>release principale</strong> à la fin de chaque epic.</li>
+</ul>
+<hr>
+<h2>2. Contexte et périmètre</h2>
+<p>Le produit cible trois rôles :</p>
+<ul>
+<li><strong>Client</strong> : découvrir, acheter, suivre, commenter.</li>
+<li><strong>Vendeur</strong> : publier ses produits, traiter ses commandes, interagir avec ses clients.</li>
+<li><strong>Admin</strong> : piloter la plateforme, gérer les acteurs et assurer la qualité globale.</li>
+</ul>
+<p>Les modules existants dans le code confirment ce périmètre (auth, user, category, product, cart, order, review, seller-follow, dashboard, chat, upload, mail).</p>
+<hr>
+<h2>3. Méthodologie Scrum (cadre entreprise)</h2>
+<ul>
+<li><strong>Sprint Planning</strong> : cadrage des objectifs et des engagements du sprint.</li>
+<li><strong>Daily Scrum</strong> : suivi quotidien de l’avancement et des blocages.</li>
+<li><strong>Sprint Review</strong> : démonstration métier de l’incrément livré.</li>
+<li><strong>Sprint Retrospective</strong> : amélioration continue du processus d’équipe.</li>
+</ul>
+<p><strong>Definition of Done</strong> (DoD) minimale :</p>
+<ol>
+<li>Fonctionnalité testée (cas nominal + erreur).</li>
+<li>API et comportement documentés.</li>
+<li>Front et back buildent sans erreur.</li>
+<li>Démo possible sur environnement local/staging.</li>
+</ol>
+<hr>
+<h2>4. Calendrier global (janvier → juin 2025)</h2>
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th>Sprints</th>
+<th>Epic actif</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Janvier</td>
+<td>Sprint 1, Sprint 2</td>
+<td>Epic 1</td>
+</tr>
+<tr>
+<td>Février</td>
+<td>Sprint 3, Sprint 4</td>
+<td>Epic 1 (fin) + Epic 2 (démarrage)</td>
+</tr>
+<tr>
+<td>Mars</td>
+<td>Sprint 5, Sprint 6</td>
+<td>Epic 2</td>
+</tr>
+<tr>
+<td>Avril</td>
+<td>Sprint 7, Sprint 8</td>
+<td>Epic 3</td>
+</tr>
+<tr>
+<td>Mai</td>
+<td>Sprint 9, Sprint 10</td>
+<td>Epic 3 (fin) + Epic 4 (démarrage)</td>
+</tr>
+<tr>
+<td>Juin</td>
+<td>Sprint 11, Sprint 12</td>
+<td>Epic 4</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Découpage en 4 Epics (Releases)</h2>
+<h3>Epic 1 — Fondations plateforme &amp; sécurité</h3>
+<p><strong>Période</strong> : Sprint 1 à Sprint 3 (janvier → mi-février)</p>
+<p>Objectif business : disposer d’une base fiable pour tous les parcours (identité, rôles, accès sécurisé).</p>
+<p>Contenu principal :</p>
+<ul>
+<li>Authentification (inscription, connexion, reset password).</li>
+<li>Gestion des rôles (client/seller/admin) et protections de routes.</li>
+<li>Structure base de données et configuration environnement.</li>
+</ul>
+<p><strong>Release R1 attendue</strong> : application sécurisée avec accès par rôles opérationnel.</p>
+<h3>Epic 2 — Offre commerciale (catalogue vendeur)</h3>
+<p><strong>Période</strong> : Sprint 4 à Sprint 6 (mi-février → mars)</p>
+<p>Objectif business : rendre l’offre consultable et gérable.</p>
+<p>Contenu principal :</p>
+<ul>
+<li>CRUD catégories (admin) et catégories vendeur.</li>
+<li>CRUD produits vendeur + gestion images/upload.</li>
+<li>Pages catalogue, fiche produit, boutique vendeur.</li>
+</ul>
+<p><strong>Release R2 attendue</strong> : offre produit complète, publiable et consultable côté client.</p>
+<h3>Epic 3 — Conversion achat &amp; relation client</h3>
+<p><strong>Période</strong> : Sprint 7 à Sprint 9 (avril → mi-mai)</p>
+<p>Objectif business : finaliser le coeur transactionnel et la confiance utilisateur.</p>
+<p>Contenu principal :</p>
+<ul>
+<li>Panier et checkout.</li>
+<li>Commandes (création, listing, suivi).</li>
+<li>Avis/commentaires, wishlist, suivi vendeurs, profil utilisateur.</li>
+</ul>
+<p><strong>Release R3 attendue</strong> : parcours d’achat bout-en-bout + fonctions d’engagement.</p>
+<h3>Epic 4 — Gouvernance, intelligence &amp; industrialisation</h3>
+<p><strong>Période</strong> : Sprint 10 à Sprint 12 (mi-mai → juin)</p>
+<p>Objectif business : préparer une version soutenable en démonstration professionnelle.</p>
+<p>Contenu principal :</p>
+<ul>
+<li>Dashboard admin, supervision vendeurs/clients/marchés.</li>
+<li>Modération, paramètres, stabilité UX multi-rôles.</li>
+<li>Chat/widget, i18n, durcissement qualité, documentation finale.</li>
+</ul>
+<p><strong>Release R4 attendue</strong> : version finale prête pour soutenance/présentation.</p>
+<hr>
+<h2>6. Détail des 12 sprints (3 sprints par epic)</h2>
+<h3>Epic 1 — Fondations plateforme &amp; sécurité</h3>
+<h4>Sprint 1</h4>
+<ul>
+<li><strong>Objectif</strong> : socle technique back/front, connexion DB, base User/Auth.</li>
+<li><strong>Backlog clé</strong> : entité User, endpoints auth initiaux, écrans sign-in/sign-up.</li>
+<li><strong>Livrable</strong> : premier flux login fonctionnel.</li>
+</ul>
+<h4>Sprint 2</h4>
+<ul>
+<li><strong>Objectif</strong> : autorisation par rôles et guards.</li>
+<li><strong>Backlog clé</strong> : redirections par rôle, routes protégées Vue Router, gestion session locale.</li>
+<li><strong>Livrable</strong> : séparation claire client/seller/admin.</li>
+</ul>
+<h4>Sprint 3</h4>
+<ul>
+<li><strong>Objectif</strong> : robustesse auth et préparation release.</li>
+<li><strong>Backlog clé</strong> : reset password, nettoyage erreurs, tests de non-régression auth.</li>
+<li><strong>Livrable</strong> : <strong>Release R1</strong> validée.</li>
+</ul>
+<h3>Epic 2 — Offre commerciale</h3>
+<h4>Sprint 4</h4>
+<ul>
+<li><strong>Objectif</strong> : gestion des catégories.</li>
+<li><strong>Backlog clé</strong> : CRUD catégories admin + listing front catalogue.</li>
+<li><strong>Livrable</strong> : base de classification des produits.</li>
+</ul>
+<h4>Sprint 5</h4>
+<ul>
+<li><strong>Objectif</strong> : gestion produits vendeur.</li>
+<li><strong>Backlog clé</strong> : ajout/édition/suppression produits, validation formulaires.</li>
+<li><strong>Livrable</strong> : espace vendeur utilisable pour publier des produits.</li>
+</ul>
+<h4>Sprint 6</h4>
+<ul>
+<li><strong>Objectif</strong> : enrichissement média et pages de vente.</li>
+<li><strong>Backlog clé</strong> : upload image, page produit détaillée, page marché vendeur.</li>
+<li><strong>Livrable</strong> : <strong>Release R2</strong> validée.</li>
+</ul>
+<h3>Epic 3 — Conversion achat &amp; relation</h3>
+<h4>Sprint 7</h4>
+<ul>
+<li><strong>Objectif</strong> : panier transactionnel.</li>
+<li><strong>Backlog clé</strong> : ajouter/modifier/supprimer items panier, calcul totaux.</li>
+<li><strong>Livrable</strong> : panier stable côté client.</li>
+</ul>
+<h4>Sprint 8</h4>
+<ul>
+<li><strong>Objectif</strong> : commande et checkout.</li>
+<li><strong>Backlog clé</strong> : création commande, lignes de commande, vue checkout.</li>
+<li><strong>Livrable</strong> : achat complet simulé.</li>
+</ul>
+<h4>Sprint 9</h4>
+<ul>
+<li><strong>Objectif</strong> : engagement utilisateur.</li>
+<li><strong>Backlog clé</strong> : avis/commentaires, wishlist, suivi vendeur, profil.</li>
+<li><strong>Livrable</strong> : <strong>Release R3</strong> validée.</li>
+</ul>
+<h3>Epic 4 — Gouvernance &amp; industrialisation</h3>
+<h4>Sprint 10</h4>
+<ul>
+<li><strong>Objectif</strong> : pilotage admin.</li>
+<li><strong>Backlog clé</strong> : dashboard global, vues vendeurs/clients/marchés.</li>
+<li><strong>Livrable</strong> : supervision opérationnelle.</li>
+</ul>
+<h4>Sprint 11</h4>
+<ul>
+<li><strong>Objectif</strong> : valeur différenciante et UX.</li>
+<li><strong>Backlog clé</strong> : chat widget, i18n, harmonisation UI entre layouts.</li>
+<li><strong>Livrable</strong> : expérience produit plus mature.</li>
+</ul>
+<h4>Sprint 12</h4>
+<ul>
+<li><strong>Objectif</strong> : stabilisation finale.</li>
+<li><strong>Backlog clé</strong> : correction bugs prioritaires, documentation, test final des parcours critiques.</li>
+<li><strong>Livrable</strong> : <strong>Release R4 (finale)</strong> prête pour soutenance.</li>
+</ul>
+<hr>
+<h2>7. KPI de suivi recommandés</h2>
+<ul>
+<li><strong>Velocity</strong> : points réalisés par sprint.</li>
+<li><strong>Commitment reliability</strong> : ratio stories engagées vs terminées.</li>
+<li><strong>Défauts critiques ouverts</strong> : cible proche de zéro en Sprint 12.</li>
+<li><strong>Couverture parcours métier</strong> : auth, catalogue, achat, admin.</li>
+</ul>
+<hr>
+<h2>8. Risques et mitigation</h2>
+<table>
+<thead>
+<tr>
+<th>Risque</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dérive de scope</td>
+<td>Retards</td>
+<td>Priorisation stricte PO + backlog grooming hebdomadaire</td>
+</tr>
+<tr>
+<td>Dette technique</td>
+<td>Instabilité fin projet</td>
+<td>Réserver 15–20% de capacité sprint pour qualité/bugs</td>
+</tr>
+<tr>
+<td>Forte dépendance front-back</td>
+<td>Blocages intégration</td>
+<td>Définir contrats API tôt et figer les DTO par sprint</td>
+</tr>
+<tr>
+<td>UX hétérogène multi-rôles</td>
+<td>Incohérences produit</td>
+<td>Design review à chaque Sprint Review</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Conclusion</h2>
+<p>La division en <strong>4 epics</strong> offre un compromis solide : suffisamment macro pour piloter la roadmap sur 6 mois, et suffisamment détaillée via 12 sprints pour suivre l’exécution Scrum au niveau opérationnel.</p>
+<p>Cette structure est adaptée à un rapport d’ingénierie ING2, et reste cohérente avec l’architecture et les modules réellement présents dans le projet.</p>
+<hr>
+<p><strong>Fin du rapport</strong></p>
+<p><strong>Fichiers associés</strong> (dossier <code>docs/</code>) : <code>RAPPORT-EPICS-SPRINTS-SCRUM-MARKETPLACE-2025.pdf</code> (version imprimable) ; <code>RAPPORT-EPICS-SPRINTS-SCRUM-MARKETPLACE-2025.html</code> (source imprimable).</p>
+
+</body>
+</html>

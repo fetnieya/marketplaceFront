@@ -1,0 +1,228 @@
+:root,
+[data-bs-theme="light"] {
+    /* Hauteur réservée sous la navbar fixe (logo large inclus) — pages client */
+    --asmad-fixed-navbar-height: 7.75rem;
+    --ar-primary: #c62828;
+    --ar-primary-rgb: 198, 40, 40;
+    --ar-link-color: #ad2121;
+    --ar-link-hover-color: #8b1a1a;
+    --ar-focus-ring-color: rgba(198, 40, 40, 0.32);
+    --ar-primary-text-emphasis: #7f1818;
+    --ar-primary-bg-subtle: #fce8e6;
+    --ar-primary-border-subtle: #f5c6c4;
+    --ar-body-bg: #faf7f7;
+}
+
+[data-bs-theme="dark"] {
+    --ar-primary: #ef5350;
+    --ar-primary-rgb: 239, 83, 80;
+    --ar-link-color: #ff8a80;
+    --ar-link-hover-color: #ffb4a2;
+    --ar-focus-ring-color: rgba(239, 83, 80, 0.35);
+    --ar-primary-text-emphasis: #ffcdd2;
+    --ar-primary-bg-subtle: #2a1214;
+    --ar-primary-border-subtle: #4a2326;
+    --ar-body-bg: #0f1317;
+}
+
+@media (max-width: 991.98px) {
+    :root {
+        --asmad-fixed-navbar-height: 6rem;
+    }
+}
+
+
+/* Boutons : le thème de base fixe encore du vert sur .btn-primary */
+
+.btn-primary {
+    --ar-btn-color: #fff;
+    --ar-btn-bg: #c62828;
+    --ar-btn-border-color: #c62828;
+    --ar-btn-hover-color: #fff;
+    --ar-btn-hover-bg: #9a2020;
+    --ar-btn-hover-border-color: #8b1c1c;
+    --ar-btn-focus-shadow-rgb: 198, 40, 40;
+    --ar-btn-active-color: #fff;
+    --ar-btn-active-bg: #8b1c1c;
+    --ar-btn-active-border-color: #7a1818;
+    --ar-btn-active-shadow: unset;
+    --ar-btn-disabled-color: #fff;
+    --ar-btn-disabled-bg: #c62828;
+    --ar-btn-disabled-border-color: #c62828;
+}
+
+.btn-outline-primary {
+    --ar-btn-color: #c62828;
+    --ar-btn-border-color: #c62828;
+    --ar-btn-hover-color: #fff;
+    --ar-btn-hover-bg: #c62828;
+    --ar-btn-hover-border-color: #c62828;
+    --ar-btn-focus-shadow-rgb: 198, 40, 40;
+    --ar-btn-active-color: #fff;
+    --ar-btn-active-bg: #9a2020;
+    --ar-btn-active-border-color: #8b1c1c;
+    --ar-btn-active-shadow: unset;
+    --ar-btn-disabled-color: #c62828;
+    --ar-btn-disabled-bg: transparent;
+    --ar-btn-disabled-border-color: #c62828;
+    --ar-gradient: none;
+}
+
+[data-bs-theme="dark"] .btn-primary {
+    --ar-btn-bg: #d32f2f;
+    --ar-btn-border-color: #d32f2f;
+    --ar-btn-hover-bg: #e53935;
+    --ar-btn-hover-border-color: #ef5350;
+    --ar-btn-focus-shadow-rgb: 211, 47, 47;
+    --ar-btn-active-bg: #b71c1c;
+    --ar-btn-active-border-color: #a31515;
+    --ar-btn-disabled-bg: #d32f2f;
+    --ar-btn-disabled-border-color: #d32f2f;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+    --ar-btn-color: #ff8a80;
+    --ar-btn-border-color: #ef5350;
+    --ar-btn-hover-color: #1a0505;
+    --ar-btn-hover-bg: #ef5350;
+    --ar-btn-hover-border-color: #ef5350;
+    --ar-btn-focus-shadow-rgb: 239, 83, 80;
+    --ar-btn-active-bg: #e53935;
+    --ar-btn-active-border-color: #e53935;
+    --ar-btn-disabled-color: #ef5350;
+    --ar-btn-disabled-border-color: #ef5350;
+}
+
+
+/* ——— Toasts Asmad (utils/toast.js) ——— */
+
+.asmad-toast-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.asmad-toast-stack > .toast {
+    margin-bottom: 0 !important;
+}
+
+.asmad-toast {
+    --asmad-toast-accent: #2563eb;
+    --asmad-toast-accent-rgb: 37, 99, 235;
+    width: 100%;
+    max-width: 24rem;
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: none;
+}
+
+.asmad-toast.show {
+    box-shadow: none;
+}
+
+.asmad-toast__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem 0.75rem 1rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #fff;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.06),
+        0 12px 28px -8px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+    border-left: 4px solid rgb(var(--asmad-toast-accent-rgb));
+}
+
+.asmad-toast__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    background: rgba(var(--asmad-toast-accent-rgb), 0.12);
+    color: rgb(var(--asmad-toast-accent-rgb));
+}
+
+.asmad-toast__body {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0.1rem;
+}
+
+.asmad-toast__title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--asmad-toast-accent-rgb));
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+}
+
+.asmad-toast__message {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: #1e293b;
+    margin: 0;
+}
+
+.asmad-toast__close {
+    flex-shrink: 0;
+    margin: 0.15rem 0 0 0;
+    opacity: 0.45;
+    padding: 0.35rem;
+}
+
+.asmad-toast__close:hover {
+    opacity: 0.85;
+}
+
+/* Types */
+.asmad-toast--success {
+    --asmad-toast-accent-rgb: 5, 122, 85;
+    --asmad-toast-accent: #057a55;
+}
+
+.asmad-toast--error {
+    --asmad-toast-accent-rgb: var(--ar-primary-rgb);
+    --asmad-toast-accent: var(--ar-primary, #c62828);
+}
+
+.asmad-toast--warning {
+    --asmad-toast-accent-rgb: 180, 83, 9;
+    --asmad-toast-accent: #b45309;
+}
+
+.asmad-toast--info {
+    --asmad-toast-accent-rgb: 37, 99, 235;
+    --asmad-toast-accent: #2563eb;
+}
+
+[data-bs-theme="dark"] .asmad-toast__inner {
+    background: #1c2128;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+[data-bs-theme="dark"] .asmad-toast__message {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-bs-theme="dark"] .asmad-toast__close {
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+[data-bs-theme="dark"] .asmad-toast__close:hover {
+    opacity: 0.9;
+}
