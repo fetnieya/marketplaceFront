@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diapo PFE — Chatbot Marketplace ASMAD</title>
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+    body { font-family: "Segoe UI", Calibri, Arial, sans-serif; margin: 0; background:#f3f5f9; color:#111; }
+    .slide {
+      width: 100vw;
+      min-height: 100vh;
+      padding: 36px 44px;
+      background: white;
+      border-bottom: 10px solid #8b1538;
+      page-break-after: always;
+      box-sizing: border-box;
+    }
+    .title { font-size: 38px; font-weight: 700; color:#8b1538; margin:0 0 12px; }
+    .subtitle { font-size: 20px; color:#333; margin:0 0 20px; }
+    h2 { font-size: 30px; color:#8b1538; margin:0 0 16px; }
+    ul { margin: 0; padding-left: 24px; font-size: 23px; line-height: 1.45; }
+    li { margin: 8px 0; }
+    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .box { border:1px solid #d8dce5; border-radius:10px; padding:16px 18px; background:#fbfcff; }
+    .small { font-size: 17px; color:#4a4a4a; margin-top: 16px; }
+    .kpi { font-size: 48px; font-weight:700; color:#8b1538; }
+    .center { display:flex; flex-direction:column; justify-content:center; }
+    .mono { font-family: Consolas, "Courier New", monospace; font-size: 18px; background:#f1f3f8; padding:10px 12px; border-radius:8px; display:inline-block; }
+    @media print { body { background:white; } .slide { width:auto; min-height:auto; } }
+  </style>
+</head>
+<body>
+  <section class="slide center">
+    <p class="title">PFE — Chatbot Intelligent pour Marketplace ASMAD</p>
+    <p class="subtitle">Université / Encadrant / Étudiant : à compléter</p>
+    <ul>
+      <li><strong>Problème :</strong> aider l'utilisateur à trouver rapidement le bon produit</li>
+      <li><strong>Solution :</strong> chatbot hybride (règles métier + RAG + génération IA)</li>
+      <li><strong>Impact :</strong> meilleure conversion, meilleure expérience client</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>1) Contexte et Problématique</h2>
+    <ul>
+      <li>Une marketplace contient beaucoup de produits : la recherche classique n'est pas toujours suffisante.</li>
+      <li>L'utilisateur exprime souvent son besoin en langage naturel : "je veux un article pour...".</li>
+      <li>Objectif : transformer une demande textuelle en recommandations concrètes.</li>
+      <li>Contrainte : ne proposer que des produits disponibles et réellement existants en base.</li>
+    </ul>
+    <p class="small">Message clé : le chatbot est un assistant d'achat, pas un simple gadget.</p>
+  </section>
+
+  <section class="slide">
+    <h2>2) Objectifs du Chatbot</h2>
+    <ul>
+      <li>Comprendre la demande utilisateur en français.</li>
+      <li>Récupérer des produits pertinents (titre, description, catégorie).</li>
+      <li>Répondre avec texte + recommandations structurées (id, nom, prix, image).</li>
+      <li>Garder un mode dégradé sans clé OpenAI.</li>
+      <li>Intégrer des réponses prédictives selon le rôle (admin / vendeur).</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>3) Stack Technique</h2>
+    <div class="two-col">
+      <div class="box">
+        <ul>
+          <li><strong>Frontend :</strong> Vue 3, Vue Router, Axios</li>
+          <li><strong>UI :</strong> widget de chat intégré dans l'application</li>
+          <li><strong>Auth :</strong> JWT côté client</li>
+        </ul>
+      </div>
+      <div class="box">
+        <ul>
+          <li><strong>Backend :</strong> NestJS 11, TypeORM, MySQL</li>
+          <li><strong>IA :</strong> OpenAI (chat + embeddings)</li>
+          <li><strong>Sécurité :</strong> JwtAuthGuard, contrôle des rôles</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small">Important : gestion des images via API interne (upload + base), pas Cloudinary.</p>
+  </section>
+
+  <section class="slide">
+    <h2>4) Architecture du Chatbot</h2>
+    <ul>
+      <li>Endpoint principal : <span class="mono">POST /chat</span> (protégé par JWT).</li>
+      <li>Endpoint d'indexation : <span class="mono">POST /chat/reindex</span> (admin uniquement).</li>
+      <li>Service central : <span class="mono">ChatService</span>.</li>
+      <li>Service vectoriel : <span class="mono">EmbeddingService</span>.</li>
+      <li>Réponse type : <span class="mono">{ reply, recommended[] }</span>.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>5) Pipeline de Traitement</h2>
+    <ul>
+      <li>1. Validation du message utilisateur (<span class="mono">ChatRequestDto</span>).</li>
+      <li>2. Détection d'intention spéciale (prévision pour admin/vendeur).</li>
+      <li>3. Chargement du catalogue disponible (<strong>status DISPONIBLE + stock &gt; 0</strong>).</li>
+      <li>4. Filtrage mots-clés + ranking sémantique (cosine similarity).</li>
+      <li>5. Génération de réponse contrôlée (prompt système anti-hallucination).</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>6) Stratégie RAG Implémentée</h2>
+    <ul>
+      <li>Le système n'envoie pas tout le catalogue : il envoie un <strong>contexte top-K</strong>.</li>
+      <li>Contexte = intersection "match lexical" + "similarité vectorielle".</li>
+      <li>Embeddings stockés en base (<span class="mono">embeddingJson</span>) et réindexables.</li>
+      <li>Le modèle reçoit des règles strictes : ne recommander que les produits du contexte.</li>
+      <li>Résultat : réponse plus précise, moins d'hallucinations.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>7) Mode Dégradé (Sans OpenAI)</h2>
+    <ul>
+      <li>Si <span class="mono">OPENAI_API_KEY</span> est absente, le chatbot reste fonctionnel.</li>
+      <li>Mode fallback : filtrage par mots-clés uniquement, sans génération LLM.</li>
+      <li>Réponse explicite pour guider l'utilisateur vers de meilleurs mots-clés.</li>
+      <li>Avantage : robustesse de service même en cas de panne externe.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>8) Fonctionnalité Avancée : Prévisions</h2>
+    <ul>
+      <li>Le chatbot détecte des intentions de type "prévision" dans le message.</li>
+      <li><strong>Admin :</strong> projection du CA/profit plateforme sur 5 mois.</li>
+      <li><strong>Vendeur :</strong> projection des unités vendues sur 5 mois.</li>
+      <li>Méthode actuelle : régression linéaire sur historique mensuel.</li>
+      <li>Valeur : assistant décisionnel, pas seulement assistant commercial.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>9) Sécurité et Gouvernance</h2>
+    <ul>
+      <li>Accès au chat protégé par JWT (<span class="mono">JwtAuthGuard</span>).</li>
+      <li>Réindexation réservée aux administrateurs.</li>
+      <li>Validation DTO pour limiter les payloads invalides.</li>
+      <li>Gestion d'erreurs OpenAI : indisponibilité proprement remontée.</li>
+      <li>Recommandation PFE : rate limiting + logs structurés + monitoring.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>10) Démonstration (Script oral 2-3 min)</h2>
+    <ul>
+      <li>Cas 1 : "Je cherche un téléphone à petit budget" → produits proposés.</li>
+      <li>Cas 2 : "Prévision de ventes sur 5 mois" avec compte vendeur.</li>
+      <li>Cas 3 : arrêt de la clé OpenAI → bascule automatique en mode fallback.</li>
+      <li>Cas 4 : reindex admin après import de nouveaux produits.</li>
+    </ul>
+    <p class="small">Astuce soutenance : montrer au jury une réponse correcte + une réponse refusée (produit absent), pour prouver le contrôle des hallucinations.</p>
+  </section>
+
+  <section class="slide">
+    <h2>11) Résultats et Bénéfices</h2>
+    <div class="two-col">
+      <div class="box">
+        <p class="kpi">+UX</p>
+        <ul>
+          <li>Recherche plus naturelle</li>
+          <li>Moins de friction dans le parcours</li>
+          <li>Réponses contextualisées</li>
+        </ul>
+      </div>
+      <div class="box">
+        <p class="kpi">+Métier</p>
+        <ul>
+          <li>Mise en avant des produits pertinents</li>
+          <li>Vision prévisionnelle simple</li>
+          <li>Architecture extensible</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <h2>12) Limites Actuelles</h2>
+    <ul>
+      <li>Évaluation qualité à formaliser avec un jeu de tests conversationnels.</li>
+      <li>Métriques chatbot (taux de clic, conversion assistée) à instrumenter davantage.</li>
+      <li>Régression linéaire utile mais limitée face aux saisonnalités complexes.</li>
+      <li>Stockage image en base à revisiter pour très grande échelle.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>13) Feuille de Route</h2>
+    <ul>
+      <li>Passer à un vrai pipeline d'évaluation (précision recommandation, satisfaction).</li>
+      <li>Ajout de mémoire conversationnelle contrôlée et profils d'intention.</li>
+      <li>A/B testing entre différentes stratégies de récupération.</li>
+      <li>Observabilité complète (traces, coûts token, latence P95).</li>
+      <li>Durcissement production : cache, files d'attente, quotas et alerting.</li>
+    </ul>
+  </section>
+
+  <section class="slide center">
+    <p class="title">Merci pour votre attention</p>
+    <p class="subtitle">Questions / Démonstration live</p>
+    <ul>
+      <li><strong>Message final :</strong> chatbot utile, maîtrisé techniquement, aligné avec les besoins métier.</li>
+    </ul>
+  </section>
+</body>
+</html>

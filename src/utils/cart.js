@@ -11,6 +11,11 @@ function getAuthHeaders() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+function hasValidAuthToken() {
+  const token = localStorage.getItem('authToken');
+  return typeof token === 'string' && token.trim().length > 0;
+}
+
 function getCurrentUser() {
   try {
     const u = localStorage.getItem('currentUser');
@@ -42,7 +47,7 @@ function setCartToStorage(items) {
  */
 export async function fetchCart(axios) {
   const user = getCurrentUser();
-  if (user && user.id) {
+  if (user && user.id && hasValidAuthToken()) {
     try {
       const res = await axios.get(`${API_BASE}/cart`, { headers: getAuthHeaders() });
       const items = Array.isArray(res.data) ? res.data : [];
@@ -65,7 +70,7 @@ export async function fetchCart(axios) {
  */
 export async function addToCart(axios, productId, quantity, product = null) {
   const user = getCurrentUser();
-  if (user && user.id) {
+  if (user && user.id && hasValidAuthToken()) {
     try {
       const res = await axios.post(
         `${API_BASE}/cart/items`,
@@ -76,28 +81,8 @@ export async function addToCart(axios, productId, quantity, product = null) {
       setCartToStorage(items);
       return items;
     } catch (err) {
-      console.warn('Add to cart API failed, using localStorage', err?.response?.status, err?.response?.data);
-      // Fallback: add to localStorage so the user is never blocked
-      const cart = getCartFromStorage();
-      const existing = cart.find((i) => i.product && i.product.id === productId);
-      if (existing) {
-        existing.quantity += quantity;
-      } else if (product) {
-        cart.push({
-          product: {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            oldPrice: product.oldPrice ?? null,
-            image: product.image || (product.images && product.images[0] && product.images[0].url) || null,
-          },
-          quantity,
-        });
-      } else {
-        cart.push({ product: { id: productId, name: '', price: 0, image: null }, quantity });
-      }
-      setCartToStorage(cart);
-      return cart;
+      console.warn('Add to cart API failed', err?.response?.status, err?.response?.data);
+      throw err;
     }
   }
   const cart = getCartFromStorage();
@@ -130,7 +115,7 @@ export async function addToCart(axios, productId, quantity, product = null) {
  */
 export async function updateCartQuantity(axios, productId, quantity) {
   const user = getCurrentUser();
-  if (user && user.id) {
+  if (user && user.id && hasValidAuthToken()) {
     try {
       await axios.patch(
         `${API_BASE}/cart/items/${productId}`,
@@ -162,7 +147,7 @@ export async function updateCartQuantity(axios, productId, quantity) {
  */
 export async function removeFromCart(axios, productId) {
   const user = getCurrentUser();
-  if (user && user.id) {
+  if (user && user.id && hasValidAuthToken()) {
     try {
       await axios.delete(`${API_BASE}/cart/items/${productId}`, { headers: getAuthHeaders() });
       return fetchCart(axios);

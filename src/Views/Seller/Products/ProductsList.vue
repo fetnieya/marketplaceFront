@@ -67,8 +67,7 @@
           >
             <option value="">Tous les statuts</option>
             <option value="disponible">Disponible</option>
-            <option value="en_attente">En attente</option>
-            <option value="vendu">Vendu</option>
+            <option value="vendu">Sold out</option>
           </select>
         </div>
 
@@ -444,6 +443,16 @@ export default {
     }
   },
   methods: {
+    isRenderableImageSrc(src) {
+      if (!src || typeof src !== 'string') return false;
+      const value = src.trim();
+      return (
+        value.startsWith('data:image/') ||
+        value.startsWith('http://') ||
+        value.startsWith('https://') ||
+        value.startsWith('/')
+      );
+    },
     async fetchProducts() {
       this.loading = true;
       this.error = null;
@@ -500,17 +509,17 @@ export default {
         if (typeof firstImage === 'object' && firstImage !== null) {
           // L'objet Image a une propriété url qui contient la data URL base64
           // (comme la photo de profil stockée dans avatar/photo)
-          if (firstImage.url) {
+          if (this.isRenderableImageSrc(firstImage.url)) {
             return firstImage.url;
           }
         }
         // Si c'est un tableau de strings (ancien format - data URL directe)
-        if (typeof firstImage === 'string') {
+        if (typeof firstImage === 'string' && this.isRenderableImageSrc(firstImage)) {
           return firstImage;
         }
       }
       // Fallback sur l'image principale (colonnes image du produit)
-      if (product.image) {
+      if (this.isRenderableImageSrc(product.image)) {
         return product.image;
       }
       // Utiliser une image placeholder en data URL SVG
@@ -518,17 +527,13 @@ export default {
     },
 
     getImageCount(product) {
-      // Support du nouveau format (table Image) et de l'ancien format (compatibilité)
-      if (product.images && Array.isArray(product.images)) {
-        return product.images.length;
-      }
-      return product.image ? 1 : 0;
+      return this.getAllImages(product).length;
     },
 
     getStatusClass(status) {
       const statusMap = {
         'disponible': 'status-available',
-        'en_attente': 'status-pending',
+        'en_attente': 'status-sold',
         'vendu': 'status-sold'
       };
       return statusMap[status || 'disponible'] || 'status-available';
@@ -537,8 +542,8 @@ export default {
     getStatusLabel(status) {
       const statusMap = {
         'disponible': 'Disponible',
-        'en_attente': 'En attente',
-        'vendu': 'Vendu'
+        'en_attente': 'Sold out',
+        'vendu': 'Sold out'
       };
       return statusMap[status || 'disponible'] || 'Disponible';
     },
@@ -556,13 +561,13 @@ export default {
       const images = [];
       if (product.images && Array.isArray(product.images) && product.images.length > 0) {
         product.images.forEach(image => {
-          if (typeof image === 'object' && image !== null && image.url) {
+          if (typeof image === 'object' && image !== null && this.isRenderableImageSrc(image.url)) {
             images.push(image.url);
-          } else if (typeof image === 'string') {
+          } else if (typeof image === 'string' && this.isRenderableImageSrc(image)) {
             images.push(image);
           }
         });
-      } else if (product.image) {
+      } else if (this.isRenderableImageSrc(product.image)) {
         images.push(product.image);
       }
       return images;
@@ -860,11 +865,6 @@ export default {
 .status-available {
   color: #10b981 !important;
   background-color: rgba(16, 185, 129, 0.15) !important;
-}
-
-.status-pending {
-  color: #f97316 !important;
-  background-color: rgba(249, 115, 22, 0.15) !important;
 }
 
 .status-sold {

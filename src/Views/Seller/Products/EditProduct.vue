@@ -180,8 +180,7 @@
                     class="form-select"
                   >
                     <option value="disponible">Disponible</option>
-                    <option value="en_attente">En attente</option>
-                    <option value="vendu">Vendu</option>
+                    <option value="vendu">Sold out</option>
                   </select>
                 </div>
 
@@ -257,6 +256,16 @@ export default {
     }
   },
   methods: {
+    isRenderableImageSrc(src) {
+      if (!src || typeof src !== 'string') return false;
+      const value = src.trim();
+      return (
+        value.startsWith('data:image/') ||
+        value.startsWith('http://') ||
+        value.startsWith('https://') ||
+        value.startsWith('/')
+      );
+    },
     handleImageError(event) {
       // Si l'image ne peut pas être chargée (base64 tronqué), la cacher silencieusement
       const img = event.target;
@@ -290,7 +299,7 @@ export default {
           category: productData.category?.id || productData.category || '',
           price: productData.price || 0,
           quantity: productData.quantity || productData.quantity || 1,
-          status: productData.status || 'disponible',
+          status: (productData.status === 'en_attente' ? 'vendu' : (productData.status || 'disponible')),
           images: productData.images || [],
           image: productData.image || ''
         };
@@ -299,12 +308,14 @@ export default {
         if (productData.images && Array.isArray(productData.images) && productData.images.length > 0) {
           // Si c'est un tableau d'objets Image (nouveau format)
           if (typeof productData.images[0] === 'object' && productData.images[0].url) {
-            this.existingImages = productData.images.map(img => img.url);
+            this.existingImages = productData.images
+              .map(img => img.url)
+              .filter((url) => this.isRenderableImageSrc(url));
           } else {
             // Si c'est un tableau de strings (ancien format pour compatibilité)
-            this.existingImages = [...productData.images];
+            this.existingImages = productData.images.filter((url) => this.isRenderableImageSrc(url));
           }
-        } else if (productData.image) {
+        } else if (this.isRenderableImageSrc(productData.image)) {
           this.existingImages = [productData.image];
         } else {
           this.existingImages = [];

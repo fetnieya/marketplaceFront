@@ -98,12 +98,12 @@
                             <div class="product-actions border-top border-bottom py-4 my-4">
                                 <div class="quantity-row d-flex align-items-center flex-wrap gap-3">
                                     <div class="quantity-selector d-flex align-items-center rounded-3 border bg-light overflow-hidden">
-                                        <button type="button" class="btn qty-btn" @click="decrementQuantity" aria-label="Diminuer">−</button>
+                                        <button type="button" class="btn qty-btn" @click="decrementQuantity" aria-label="Diminuer" :disabled="!isPurchasable">−</button>
                                         <input type="number" class="qty-input" :value="quantity" readonly min="1" aria-label="Quantité">
-                                        <button type="button" class="btn qty-btn" @click="incrementQuantity" aria-label="Augmenter">+</button>
+                                        <button type="button" class="btn qty-btn" @click="incrementQuantity" aria-label="Augmenter" :disabled="!isPurchasable">+</button>
                                     </div>
-                                    <button type="button" class="btn btn-add-cart flex-grow-1 flex-lg-grow-0" @click="addToCart">
-                                        <i class="ai-cart me-2"></i>Ajouter au panier
+                                    <button type="button" class="btn btn-add-cart flex-grow-1 flex-lg-grow-0" @click="addToCart" :disabled="!isPurchasable">
+                                        <i class="ai-cart me-2"></i>{{ isPurchasable ? 'Ajouter au panier' : 'Sold out' }}
                                     </button>
                                 </div>
                             </div>
@@ -390,8 +390,19 @@ export default {
             if (!this.product?.sellerId || !this.currentUser || !this.isClientUser) return false;
             return this.currentUser.id !== this.product.sellerId;
         },
+        isPurchasable() {
+            if (!this.product) return false;
+            const status = String(this.product.status || '').toLowerCase();
+            const qty = Number(this.product.quantity ?? 0);
+            return status === 'disponible' && qty > 0;
+        },
     },
     methods: {
+        hasValidAuthToken() {
+            const token = localStorage.getItem('authToken');
+            return typeof token === 'string' && token.trim().length > 0;
+        },
+
         getAuthHeaders() {
             const token = localStorage.getItem('authToken');
             return token ? { Authorization: `Bearer ${token}` } : {};
@@ -430,17 +441,25 @@ export default {
         },
         
         incrementQuantity() {
-            this.quantity++;
+            if (!this.isPurchasable) return;
+            const maxQty = Math.max(1, Number(this.product?.quantity ?? 1));
+            if (this.quantity < maxQty) {
+                this.quantity++;
+            }
         },
         
         decrementQuantity() {
+            if (!this.isPurchasable) return;
             if (this.quantity > 1) {
                 this.quantity--;
             }
         },
         
         async addToCart() {
-            if (!this.product) return;
+            if (!this.product || !this.isPurchasable) {
+                showToast('Produit indisponible (sold out).', 'warning');
+                return;
+            }
             const qty = Math.max(1, parseInt(this.quantity, 10) || 1);
             const productSnapshot = {
                 id: this.product.id,
@@ -462,7 +481,9 @@ export default {
                     { title: 'Panier' },
                 );
             } catch (err) {
-                showToast('Impossible d\'ajouter au panier. Réessayez.', 'error');
+                const apiMessage = err?.response?.data?.message;
+                const message = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+                showToast(message || 'Impossible d\'ajouter au panier. Réessayez.', 'error');
             }
         },
 
@@ -471,7 +492,7 @@ export default {
                 this.isFollowingSeller = false;
                 return;
             }
-            if (!this.currentUser || !this.isClientUser) {
+            if (!this.currentUser || !this.isClientUser || !this.hasValidAuthToken()) {
                 this.isFollowingSeller = false;
                 return;
             }
@@ -489,6 +510,11 @@ export default {
 
         async toggleSellerFollow() {
             if (!this.product?.sellerId || !this.canFollowSeller) return;
+            if (!this.hasValidAuthToken()) {
+                showToast('Session expirée. Reconnectez-vous pour suivre ce vendeur.', 'warning');
+                this.$router.push({ path: '/sign-in', query: { redirect: this.$route.fullPath } });
+                return;
+            }
             try {
                 if (this.isFollowingSeller) {
                     await axios.delete(
@@ -506,9 +532,15 @@ export default {
                 }
             } catch (error) {
                 console.error('Unable to update follow', error);
-                if (typeof alert === 'function') {
-                    alert("Impossible de mettre à jour l'abonnement. Réessayez.");
+                const status = error?.response?.status;
+                const apiMessage = error?.response?.data?.message;
+                const message = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+                if (status === 401) {
+                    showToast('Session expirée. Reconnectez-vous pour suivre ce vendeur.', 'warning');
+                    this.$router.push({ path: '/sign-in', query: { redirect: this.$route.fullPath } });
+                    return;
                 }
+                showToast(message || "Impossible de mettre à jour l'abonnement. Réessayez.", 'error');
             }
         },
 
@@ -584,7 +616,25 @@ export default {
                 await this.fetchReviews();
             } catch (err) {
                 console.error('Submit review:', err);
-                alert('Impossible de publier l\'avis. Réessayez plus tard.');
+                const status = err?.response?.status;
+                const apiMessage = err?.response?.data?.message;
+                const message = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+                if (
+                    status === 401 ||
+                    status === 403 ||
+                    (typeof message === 'string' && message.toLowerCase().includes('unauthorized'))
+                ) {
+                    showToast('Vous ne pouvez commenter qu’un produit acheté et reçu.', 'warning');
+                    return;
+                }
+                if (
+                    typeof message === 'string' &&
+                    (message.toLowerCase().includes('achet') || message.toLowerCase().includes('livr'))
+                ) {
+                    showToast('Vous ne pouvez commenter qu’un produit acheté et reçu.', 'warning');
+                } else {
+                    showToast(message || 'Impossible de publier l\'avis. Réessayez plus tard.', 'error');
+                }
             } finally {
                 this.submittingReview = false;
             }

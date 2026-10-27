@@ -203,6 +203,7 @@
 
 <script>
 import axios from 'axios';
+import { showToast } from '../../utils/toast';
 
 const PLACEHOLDER =
   'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+';
@@ -260,7 +261,7 @@ export default {
       return (this.currentUser?.role || '').toLowerCase() === 'client';
     },
     canFollowSeller() {
-      if (!this.sellerId || !this.currentUser || !this.isClientUser) return false;
+      if (!this.sellerId || !this.currentUser || !this.isClientUser || !this.hasValidAuthToken()) return false;
       return this.currentUser.id !== this.sellerId;
     },
     promoProducts() {
@@ -282,6 +283,11 @@ export default {
     },
   },
   methods: {
+    hasValidAuthToken() {
+      const token = localStorage.getItem('authToken');
+      return typeof token === 'string' && token.trim().length > 0;
+    },
+
     getAuthHeaders() {
       const token = localStorage.getItem('authToken');
       return token ? { Authorization: `Bearer ${token}` } : {};
@@ -406,12 +412,18 @@ export default {
 
     async toggleFollow() {
       if (!this.canFollowSeller || !this.sellerId) return;
+      if (!this.hasValidAuthToken()) {
+        showToast('Session expirée. Reconnectez-vous pour suivre ce vendeur.', 'warning');
+        this.$router.push({ path: '/sign-in', query: { redirect: this.$route.fullPath } });
+        return;
+      }
       try {
         if (this.isFollowingSeller) {
           await axios.delete(`${this.apiBase}/followers/by-seller/${this.sellerId}`, {
             headers: this.getAuthHeaders(),
           });
           this.isFollowingSeller = false;
+          showToast('Vendeur retiré de vos marchés suivis.', 'success');
         } else {
           await axios.post(
             `${this.apiBase}/followers`,
@@ -419,9 +431,19 @@ export default {
             { headers: this.getAuthHeaders() },
           );
           this.isFollowingSeller = true;
+          showToast('Vendeur ajouté à vos marchés suivis.', 'success');
         }
       } catch (e) {
         console.error(e);
+        const status = e?.response?.status;
+        const apiMessage = e?.response?.data?.message;
+        const message = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+        if (status === 401) {
+          showToast('Session expirée. Reconnectez-vous pour suivre ce vendeur.', 'warning');
+          this.$router.push({ path: '/sign-in', query: { redirect: this.$route.fullPath } });
+          return;
+        }
+        showToast(message || "Impossible de mettre à jour l'abonnement. Réessayez.", 'error');
       }
     },
   },

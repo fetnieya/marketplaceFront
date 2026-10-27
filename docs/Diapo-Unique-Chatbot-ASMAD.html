@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diapo Unique Jury — Chatbot ASMAD</title>
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+    body { margin:0; font-family:"Segoe UI", Arial, sans-serif; background:#fff; }
+    .slide { width:100vw; min-height:100vh; padding:46px 54px; box-sizing:border-box; border-top:14px solid #8b1538; }
+    h1 { margin:0 0 12px; font-size:44px; color:#8b1538; }
+    h2 { margin:0 0 24px; font-size:24px; color:#333; font-weight:600; }
+    ul { margin:0; padding-left:28px; font-size:28px; line-height:1.5; }
+    li { margin:10px 0; }
+    .mono { font-family:Consolas, monospace; font-size:24px; background:#eef2f8; padding:2px 8px; border-radius:6px; }
+    .foot { margin-top:26px; font-size:22px; color:#222; }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <h1>Chatbot Intelligent — Marketplace ASMAD</h1>
+    <h2>Version Jury (ultra-minimale)</h2>
+    <ul>
+      <li><strong>Problème :</strong> recherche classique limitée ; besoin d'une interaction en langage naturel.</li>
+      <li><strong>Solution :</strong> endpoint sécurisé <span class="mono">POST /chat</span> + RAG (mots-clés + embeddings).</li>
+      <li><strong>Données :</strong> produits <strong>DISPONIBLE</strong> et stock <strong>&gt; 0</strong>, réponse <span class="mono">reply + recommended[]</span>.</li>
+      <li><strong>Robustesse :</strong> fallback sans OpenAI ; reindex admin via <span class="mono">POST /chat/reindex</span>.</li>
+      <li><strong>Impact :</strong> recommandations plus pertinentes, expérience utilisateur améliorée, aide décisionnelle (prévision 5 mois).</li>
+    </ul>
+    <p class="foot"><strong>Note :</strong> gestion images via API interne (base64/BLOB), <strong>sans Cloudinary</strong>.</p>
+  </section>
+</body>
+</html>

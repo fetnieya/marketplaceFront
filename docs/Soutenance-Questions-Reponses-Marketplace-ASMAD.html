@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Soutenance — Questions &amp; réponses — Marketplace ASMAD</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #1a1a1a;
+      max-width: 190mm;
+      margin: 0 auto;
+      padding: 12px 8px 24px;
+    }
+    h1 {
+      font-size: 18pt;
+      border-bottom: 2px solid #8b1538;
+      padding-bottom: 8px;
+      margin-top: 0;
+    }
+    h2 {
+      font-size: 12.5pt;
+      color: #8b1538;
+      margin-top: 22px;
+      page-break-after: avoid;
+    }
+    .meta {
+      font-size: 9.5pt;
+      color: #444;
+      margin-bottom: 18px;
+    }
+    .q {
+      font-weight: 700;
+      margin-top: 14px;
+      page-break-after: avoid;
+      color: #111;
+    }
+    .a {
+      margin: 4px 0 0 0;
+      text-align: justify;
+    }
+    .toc { font-size: 10pt; margin: 16px 0; }
+    .toc li { margin: 4px 0; }
+    @media print {
+      body { padding: 0; }
+      h2 { page-break-before: auto; }
+      .block { break-inside: avoid; }
+    }
+    .block { margin-bottom: 6px; }
+    footer.note {
+      margin-top: 28px;
+      font-size: 9pt;
+      color: #555;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Questions de soutenance &mdash; Marketplace ASMAD</h1>
+  <p class="meta">
+    Préparation à l&rsquo;oral : formulations type jury, réponses structurées.
+    Stack : <strong>Vue 3</strong> (SPA, Vue Router, vue-i18n, Axios, Bootstrap), <strong>NestJS 11</strong>, <strong>TypeORM</strong>, <strong>MySQL</strong>.
+    <strong>Images :</strong> pas d&rsquo;utilisation de Cloudinary ni d&rsquo;autre CDN ; upload via l&rsquo;API, encodage et persistance conformément à votre implémentation actuelle (voir section 8).
+  </p>
+
+  <h2>Sommaire des thèmes</h2>
+  <ul class="toc">
+    <li>1. Problème métier, objectifs et acteurs</li>
+    <li>2. Architecture logicielle et choix d&rsquo;ingénierie</li>
+    <li>3. Couche présentation (Vue 3)</li>
+    <li>4. Couche application (NestJS, API)</li>
+    <li>5. Modèle de données et règles métier</li>
+    <li>6. Sécurité : authentification, autorisation, menaces</li>
+    <li>7. Parcours d&rsquo;achat, panier, commande</li>
+    <li>8. Fichiers, images (sans Cloudinary), e-mail, social vendeur</li>
+    <li>9. Assistance conversationnelle et IA (OpenAI)</li>
+    <li>10. Pilotage, tableaux de bord, indicateurs</li>
+    <li>11. Qualité logicielle, performance, industrialisation</li>
+    <li>12. Méthodologie agile (Scrum) et collaboration</li>
+    <li>13. Déploiement, exploitation, continuité de service</li>
+    <li>14. Bilan critique et feuille de route</li>
+  </ul>
+
+  <h2>1. Problème métier, objectifs et acteurs</h2>
+
+  <div class="block">
+    <p class="q">Q1. En quoi consiste concrètement votre projet, et quel besoin métier adresse-t-il ?</p>
+    <p class="a">R. Il s&rsquo;agit d&rsquo;une <strong>marketplace</strong> : une plateforme où plusieurs <strong>vendeurs</strong> publient des produits, où des <strong>clients</strong> consultent un catalogue, constituent un panier et passent des commandes, et où des <strong>administrateurs</strong> assurent la cohérence des données, la gestion des comptes et le suivi global. La marque présentée côté interface est <strong>ASMAD</strong>. Le besoin est de <strong>mutualiser l&rsquo;offre</strong> tout en <strong>séparant les responsabilités</strong> selon le rôle.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q2. Pourquoi ne pas s&rsquo;appuyer uniquement sur une boutique « mono-vendeur » (solution classique) ?</p>
+    <p class="a">R. Une marketplace permet de <strong>faire coexister plusieurs catalogues</strong> et identités vendeurs sous une même expérience utilisateur, ce qui complexifie le modèle (rôles, droits, agrégation des produits) mais reflète mieux des cas réels (places de marché, artisans, PME multiples).</p>
+  </div>
+  <div class="block">
+    <p class="q">Q3. Pouvez-vous détailler les acteurs, leurs objectifs et leurs contraintes respectives ?</p>
+    <p class="a">R. <strong>Client :</strong> découvrir, comparer, acheter, suivre ses commandes, éventuellement noter et <strong>suivre</strong> des vendeurs. <strong>Vendeur :</strong> gérer ses produits et son image, lire les retours. <strong>Administrateur :</strong> superviser utilisateurs, catégories globales, commandes, contenus sensibles. Chaque acteur accède à un <strong>sous-ensemble de fonctionnalités</strong> contrôlé côté API (rôles).</p>
+  </div>
+  <div class="block">
+    <p class="q">Q4. Qu&rsquo;avez-vous volontairement laissé hors périmètre ou traité de façon simplifiée ?</p>
+    <p class="a">R. À citer selon votre démo : <strong>paiement en ligne</strong> avec un prestataire agréé (PSP) en conditions réelles, <strong>facturation normative</strong>, <strong>logistique</strong> (transport, étiquettes), <strong>haute disponibilité multi-site</strong>, et éventuellement une <strong>suite de tests automatisés</strong> couvrant tous les parcours. L&rsquo;important est d&rsquo;assumer clairement le périmètre et d&rsquo;indiquer la <strong>prochaine étape</strong> pour industrialiser.</p>
+  </div>
+
+  <h2>2. Architecture logicielle et choix d&rsquo;ingénierie</h2>
+
+  <div class="block">
+    <p class="q">Q5. Quels sont les avantages d&rsquo;une séparation stricte entre interface (SPA) et API REST ?</p>
+    <p class="a">R. On obtient un <strong>contrat d&rsquo;interface</strong> (HTTP/JSON) stable entre les couches : le front peut évoluer (UX, framework) sans réécrire la logique métier, et d&rsquo;autres clients (mobile, partenaires) pourraient consommer la même API. Cela facilite aussi le <strong>déploiement indépendant</strong> et les tests ciblés.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q6. Pourquoi avoir retenu NestJS plutôt qu&rsquo;un framework minimaliste type Express seul ?</p>
+    <p class="a">R. NestJS impose une <strong>architecture par modules</strong>, l&rsquo;<strong>injection de dépendances</strong> et des patterns éprouvés (guards, pipes, interceptors), ce qui améliore la <strong>lisibilité</strong> et la <strong>scalabilité humaine</strong> du projet (onboarding, revues). L&rsquo;intégration officielle avec la validation, JWT et TypeORM réduit le code « plomberie ».</p>
+  </div>
+  <div class="block">
+    <p class="q">Q7. Qu&rsquo;apporte Vue 3 dans votre contexte par rapport à d&rsquo;autres frameworks front ?</p>
+    <p class="a">R. Vue 3 combine courbe d&rsquo;apprentissage raisonnable, <strong>Composition API</strong> pour la réutilisabilité, et un écosystème mature (<strong>Vue Router</strong>, <strong>vue-i18n</strong>). Pour une SPA métier avec plusieurs espaces (public, vendeur, admin), la composition par <strong>layouts</strong> et routes imbriquées est adaptée.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q8. Décrivez la chaîne bout-en-bout d&rsquo;une requête utilisateur authentifiée.</p>
+    <p class="a">R. Le navigateur exécute la SPA Vue ; le routeur affiche la vue protégée si le jeton est présent ; <strong>Axios</strong> envoie la requête avec <code>Authorization: Bearer &lt;JWT&gt;</code> ; NestJS applique <strong>Passport-JWT</strong> et les <strong>guards</strong> de rôle ; le contrôleur délègue au <strong>service</strong> ; TypeORM interroge <strong>MySQL</strong> ; la réponse JSON remonte jusqu&rsquo;au composant qui met à jour l&rsquo;interface.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q9. Où se situent la logique métier et pourquoi ne pas la laisser uniquement dans le front ?</p>
+    <p class="a">R. La logique critique (prix, statuts, droits, intégrité des commandes) doit vivre <strong>côté serveur</strong> : le client peut être modifié par l&rsquo;utilisateur. Le front valide l&rsquo;UX ; le back <strong>valide et applique</strong> les règles et la persistance.</p>
+  </div>
+
+  <h2>3. Couche présentation (Vue 3)</h2>
+
+  <div class="block">
+    <p class="q">Q10. Comment structurez-vous la navigation et la cohérence visuelle entre espaces (client, vendeur, admin) ?</p>
+    <p class="a">R. <strong>Vue Router</strong> définit des arborescences par domaine fonctionnel ; des <strong>layouts</strong> distincts (par ex. DefaultLayout, SellerLayout, AdminLayout, AuthLayout) encapsulent en-têtes, menus et zones de contenu, ce qui évite la duplication et clarifie les parcours.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q11. Comment industrialisez-vous le multilingue sans dupliquer les écrans ?</p>
+    <p class="a">R. Avec <strong>vue-i18n</strong> : les chaînes sont externalisées (fichiers de messages). L&rsquo;ajout d&rsquo;une langue consiste à enrichir les ressources, pas à recopier les composants.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q12. Comment gérez-vous les appels API, les erreurs réseau et l&rsquo;état de chargement ?</p>
+    <p class="a">R. Via <strong>Axios</strong> (promesses), avec gestion des codes HTTP (4xx/5xx), messages utilisateur (toasts ou équivalent), et indicateurs de chargement dans les vues sensibles (listes, formulaires). L&rsquo;objectif est une <strong>expérience prévisible</strong> en cas d&rsquo;échec.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q13. Quel est le rôle du widget de chat dans l&rsquo;expérience utilisateur ?</p>
+    <p class="a">R. Il propose une <strong>assistance contextuelle</strong> : orientation dans le catalogue, réponses aux questions fréquentes, et lorsque le backend est configuré, des <strong>suggestions de produits</strong> renvoyées avec la réponse pour raccourcir le parcours d&rsquo;achat.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q14. Pourquoi Bootstrap, et comment éviter une interface « générique » ?</p>
+    <p class="a">R. Bootstrap accélère la <strong>responsivité</strong> et les composants de base ; une couche de <strong>thème</strong> (CSS d&rsquo;override, identité ASMAD) personnalise l&rsquo;apparence tout en gardant une maintenance simple.</p>
+  </div>
+
+  <h2>4. Couche application (NestJS, API)</h2>
+
+  <div class="block">
+    <p class="q">Q15. Comment découpez-vous fonctionnellement le backend en modules ?</p>
+    <p class="a">R. Chaque domaine métier ou transverse a son module : <strong>User, Auth, Category, Product, Review, Cart, Order, Upload, Mail, SellerFollow, Chat, Dashboard</strong>, etc., déclarés dans <code>AppModule</code>. Cela respecte le principe de <strong>cohésion forte</strong> et de <strong>couplage faible</strong> entre domaines.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q16. Comment externalisez-vous la configuration (secrets, connexion base, clés API) ?</p>
+    <p class="a">R. <strong>@nestjs/config</strong> charge un fichier <code>.env</code> (non versionné). Un <code>.env.example</code> sert de modèle documenté pour recréer un environnement local ou de préproduction sans exposer de secrets.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q17. Sur quel mécanisme repose la validation des entrées HTTP ?</p>
+    <p class="a">R. Des <strong>DTO</strong> annotés avec <strong>class-validator</strong> et <strong>class-transformer</strong>, combinés aux pipes NestJS : les données invalides sont rejetées <strong>avant</strong> l&rsquo;exécution du service, ce qui réduit les risques d&rsquo;états incohérents.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q18. Quel est le rôle du <code>DatabaseInitService</code> dans votre démarche ?</p>
+    <p class="a">R. Il s&rsquo;agit typiquement d&rsquo;un <strong>amorçage</strong> au démarrage (jeux de données minimaux, comptes de démonstration, référentiels) pour rendre l&rsquo;environnement de développement ou de soutenance <strong>immédiatement exploitable</strong>. Précisez à l&rsquo;oral le contenu exact généré dans votre branche.</p>
+  </div>
+
+  <h2>5. Modèle de données et règles métier</h2>
+
+  <div class="block">
+    <p class="q">Q19. Pourquoi un SGBDR (MySQL) et un ORM (TypeORM) pour ce type d&rsquo;application ?</p>
+    <p class="a">R. Les entités (utilisateurs, commandes, lignes de commande, panier) se prêtent naturellement au modèle <strong>relationnel</strong> (intégrité référentielle, transactions). TypeORM aligne le <strong>modèle objet</strong> TypeScript sur le schéma SQL et limite les requêtes SQL ad hoc non maîtrisées.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q20. Que signifie <code>synchronize: true</code> dans TypeORM, et quelle est votre position pour la production ?</p>
+    <p class="a">R. TypeORM <strong>modifie le schéma</strong> pour refléter les entités : pratique en développement, <strong>dangereux en production</strong> (migrations implicites, risque de perte). En entreprise, on bascule vers des <strong>migrations versionnées</strong> et <code>synchronize: false</code>.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q21. Comment modélisez-vous produit, catégorie et médias associés ?</p>
+    <p class="a">R. <strong>Product</strong> est relié à <strong>Category</strong> ; les images sont portées par une entité <strong>Image</strong> (lien au produit, ordre d&rsquo;affichage). Un <strong>statut produit</strong> (<code>ProductStatus</code>) permet de gérer le cycle de vie (brouillon, publié, etc.) selon votre énumération.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q22. Comment le panier est-il modélisé et pourquoi l&rsquo;attacher à un utilisateur authentifié ?</p>
+    <p class="a">R. Des <strong>CartItem</strong> référencent l&rsquo;utilisateur et le produit avec une quantité. L&rsquo;association au compte garantit la <strong>persistence</strong> entre sessions et simplifie la transformation en commande.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q23. Pourquoi distinguer <code>Order</code> et <code>OrderItem</code> ?</p>
+    <p class="a">R. Pour <strong>figer l&rsquo;histoire commerciale</strong> : chaque ligne conserve produit, quantité et prix au moment de la commande, indépendamment des futures modifications du catalogue ou des tarifs.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q24. Comment garantir la cohérence lors de la création d&rsquo;une commande à partir du panier ?</p>
+    <p class="a">R. Idéalement : transaction base de données (tout réussit ou tout est annulé), vérification des <strong>stocks</strong> et des <strong>prix</strong> au moment de la validation, puis vidage ou mise à jour du panier. Détaillez ce que votre <code>OrderService</code> fait effectivement.</p>
+  </div>
+
+  <h2>6. Sécurité : authentification, autorisation, menaces</h2>
+
+  <div class="block">
+    <p class="q">Q25. Quelle politique appliquez-vous au stockage des mots de passe ?</p>
+    <p class="a">R. Hachage avec <strong>bcrypt</strong> (coût adapté) : aucun mot de passe en clair en base ; en cas de fuite, les empreintes restent difficiles à inverser.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q26. Expliquez le flux JWT de bout en bout.</p>
+    <p class="a">R. Après vérification email/mot de passe, le serveur signe un <strong>JWT</strong> (<code>@nestjs/jwt</code>) contenant les claims nécessaires (identité, rôle). Le client le stocke et l&rsquo;envoie dans l&rsquo;en-tête <code>Authorization</code>. Chaque route protégée valide la signature et l&rsquo;expiration via <strong>Passport</strong>.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q27. Distinction entre authentification et autorisation : où le code l&rsquo;exprime-t-il ?</p>
+    <p class="a">R. <strong>Authentification</strong> : « qui êtes-vous ? » (JWT valide). <strong>Autorisation</strong> : « que pouvez-vous faire ? » (rôle admin, vendeur, client) via guards ou contrôles dans le service. Une erreur fréquente est de vérifier uniquement côté interface.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q28. Comment sécurisez-vous la réinitialisation de mot de passe ?</p>
+    <p class="a">R. Génération d&rsquo;un <strong>code à durée de vie limitée</strong> stocké en table dédiée (<code>ResetCode</code>), envoi par e-mail (<strong>Nodemailer</strong>), vérification puis mise à jour du hash. Il faut aussi limiter le <strong>brute force</strong> sur le code (piste d&rsquo;amélioration : rate limiting).</p>
+  </div>
+  <div class="block">
+    <p class="q">Q29. Qu&rsquo;est-ce que la logique « première connexion » liée au CIN ?</p>
+    <p class="a">R. Règle métier : le mot de passe initial peut correspondre au <strong>CIN</strong> ; le système détecte ce cas et peut imposer un <strong>changement obligatoire</strong> pour réduire le risque lié à un secret faible et connu administrativement.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q30. Quelles contre-mesures proposez-vous face à XSS, injection SQL et abus d&rsquo;API ?</p>
+    <p class="a">R. <strong>XSS :</strong> templates Vue qui échappent par défaut, validation des entrées. <strong>Injection SQL :</strong> ORM et requêtes paramétrées. <strong>Abus :</strong> limitation de débit, CORS strict, HTTPS en production, rotation des secrets, journalisation des anomalies. Mentionnez ce qui est <strong>déjà en place</strong> et ce qui est <strong>prévu</strong>.</p>
+  </div>
+
+  <h2>7. Parcours d&rsquo;achat, panier, commande</h2>
+
+  <div class="block">
+    <p class="q">Q31. Décrivez le parcours critique « découverte &rarr; commande » du point de vue données.</p>
+    <p class="a">R. Navigation catalogue &rarr; consultation fiche produit &rarr; ajout au <strong>panier</strong> (lignes persistées) &rarr; passage par le <strong>checkout</strong> &rarr; création d&rsquo;une <strong>commande</strong> et de ses lignes &rarr; consultation dans « Mes commandes ».</p>
+  </div>
+  <div class="block">
+    <p class="q">Q32. Où en est l&rsquo;intégration d&rsquo;un prestataire de paiement (PSP) ?</p>
+    <p class="a">R. Réponse transparente : si la démo s&rsquo;arrête à un <strong>statut de commande</strong> ou une simulation, le jury attend une vision claire des <strong>étapes d&rsquo;intégration</strong> (redirection, webhooks, idempotence, conformité PCI-DSS en encadrant ce qui reste côté PSP).</p>
+  </div>
+  <div class="block">
+    <p class="q">Q33. Comment traitez-vous la question des stocks et des commandes concurrentes ?</p>
+    <p class="a">R. Si le champ existe : décrément atomique ou verrouillage optimiste/pessimiste en transaction. Sinon : reconnaître la limite actuelle et proposer une <strong>file d&rsquo;attente</strong> ou une réservation temporaire comme évolution.</p>
+  </div>
+
+  <h2>8. Fichiers, images (sans Cloudinary), e-mail, suivi vendeurs</h2>
+
+  <div class="block">
+    <p class="q">Q34. Utilisez-vous un service tiers type Cloudinary pour les images ?</p>
+    <p class="a">R. <strong>Non.</strong> Le projet ne s&rsquo;appuie pas sur Cloudinary pour l&rsquo;hébergement ou la transformation d&rsquo;images. (Si des paquets npm liés à Cloudinary figurent encore dans <code>package.json</code>, vous pouvez préciser qu&rsquo;ils ne sont <strong>pas utilisés en production</strong> dans votre chaîne actuelle — évitez toute ambiguïté avec le jury.)</p>
+  </div>
+  <div class="block">
+    <p class="q">Q35. Alors, comment les images sont-elles transmises et stockées dans votre implémentation ?</p>
+    <p class="a">R. L&rsquo;endpoint <code>POST /upload/file</code> reçoit le fichier via <strong>Multer</strong> (<code>FileInterceptor</code>), vérifie le type MIME (images), convertit le buffer en <strong>chaîne base64</strong> et renvoie une <strong>data URL</strong> (<code>data:image/…;base64,…</code>). Le service d&rsquo;<strong>images</strong> peut ensuite enregistrer le contenu binaire en base (entité <strong>Image</strong>, champ buffer) avec contrôle de taille (plafond côté serveur). Ainsi, pas de CDN externe : les médias transitent par votre API et sont persistés dans <strong>MySQL</strong>.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q36. Quels sont les compromis du stockage d&rsquo;images en base (BLOB) par rapport à un stockage objet (S3, disque) ?</p>
+    <p class="a">R. <strong>Avantages :</strong> simplicité de sauvegarde/restauration avec la base, cohérence transactionnelle. <strong>Inconvénients :</strong> base plus lourde, mise en cache et CDN moins triviales, coût des grosses pièces jointes. En évolution, on pourrait externaliser les fichiers et ne garder en base que l&rsquo;URL ou la clé.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q37. Quel est le rôle du module Mail et quels flux l&rsquo;alimentent ?</p>
+    <p class="a">R. <strong>Nodemailer</strong> envoie des e-mails transactionnels via SMTP (paramètres <code>.env</code>), notamment pour la <strong>réinitialisation de mot de passe</strong> et d&rsquo;éventuelles notifications métier.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q38. Comment modélisez-vous la relation « client qui suit un vendeur » ?</p>
+    <p class="a">R. Le module <strong>seller-follow</strong> matérialise une association utilisateur &rarr; vendeur, exposée en API pour alimenter les écrans de <strong>marchés suivis</strong> ou d&rsquo;abonnements, et favoriser la rétention.</p>
+  </div>
+
+  <h2>9. Assistance conversationnelle et IA (OpenAI)</h2>
+
+  <div class="block">
+    <p class="q">Q39. Quelle valeur métier apporte l&rsquo;intégration d&rsquo;un modèle de langage à votre marketplace ?</p>
+    <p class="a">R. Elle complète la recherche classique par une <strong>interaction naturelle</strong> : reformulation des besoins, explications, et mise en avant de produits pertinents dans le contexte du catalogue réel.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q40. Comment le backend relie-t-il la réponse du modèle au catalogue ?</p>
+    <p class="a">R. Le <code>ChatService</code> s&rsquo;appuie sur les <strong>produits</strong> en base ; un service d&rsquo;<strong>embeddings</strong> peut scorer la similarité sémantique ; la réponse inclut du texte et une liste structurée de <strong>produits recommandés</strong> pour l&rsquo;affichage dans le widget.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q41. Que se passe-t-il si la clé OpenAI est absente ou si le service externe est indisponible ?</p>
+    <p class="a">R. Le service doit échouer proprement (<strong>503</strong> ou message explicite) : le chat est une <strong>fonction optionnelle</strong> ; le cœur e-commerce reste utilisable sans IA.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q42. Quelles précautions RGPD et de gouvernance associez-vous à l&rsquo;usage de l&rsquo;IA ?</p>
+    <p class="a">R. Minimisation des données personnelles dans les prompts, information de l&rsquo;utilisateur, durée de conservation des journaux, et distinction entre <strong>données traitées par un sous-traitant</strong> (OpenAI) et données strictement locales.</p>
+  </div>
+
+  <h2>10. Pilotage, tableaux de bord, indicateurs</h2>
+
+  <div class="block">
+    <p class="q">Q43. Quels indicateurs exposez-vous aux administrateurs ou vendeurs ?</p>
+    <p class="a">R. Le <strong>DashboardModule</strong> agrège des métriques (volumes, tendances selon implémentation) ; le front les visualise avec <strong>Chart.js</strong> / <strong>vue-chartjs</strong> pour une lecture rapide de l&rsquo;activité.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q44. À quoi sert le module <code>forecast</code> dans votre architecture ?</p>
+    <p class="a">R. Il peut fournir des <strong>indicateurs prédictifs simples</strong> ou des agrégations temporelles pour enrichir le tableau de bord ou le chat. Précisez à l&rsquo;oral la formule ou la logique réellement codée (moyenne mobile, extrapolation, etc.).</p>
+  </div>
+
+  <h2>11. Qualité logicielle, performance, industrialisation</h2>
+
+  <div class="block">
+    <p class="q">Q45. Quelle est votre stratégie de tests : unitaires, intégration, e2e ?</p>
+    <p class="a">R. NestJS fournit <strong>Jest</strong> ; décrivez ce que vous avez couvert (services critiques, contrôleurs mockés). Si la couverture est limitée, présentez un <strong>plan priorisé</strong> : auth, création de commande, panier.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q46. Outre les tests, quels garde-fous utilisez-vous pour la qualité ?</p>
+    <p class="a">R. <strong>ESLint</strong>, typage TypeScript, conventions de dossiers, revues entre pairs, et commits réguliers pour tracer l&rsquo;historique des décisions.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q47. Si le trafic multiplie par dix, quels seraient vos premiers leviers ?</p>
+    <p class="a">R. Mise en cache lecture (Redis), <strong>pagination</strong> systématique des listes, index SQL sur clés de jointure et filtres, mise en <strong>CDN</strong> des assets statiques du front, montée en charge horizontale du backend derrière un load balancer, lecture répliquée MySQL.</p>
+  </div>
+
+  <h2>12. Méthodologie agile (Scrum) et collaboration</h2>
+
+  <div class="block">
+    <p class="q">Q48. Comment avez-vous appliqué Scrum (time-boxing, artefacts, cérémonies) ?</p>
+    <p class="a">R. Sprints de durée fixe, <strong>backlog produit</strong> priorisé, objectifs de sprint, revue de fin de sprint et rétrospective. Vos livrables dans <code>docs/</code> (rapports, epics, planning) peuvent illustrer cette démarche.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q49. Comment avez-vous découpé et priorisé les fonctionnalités ?</p>
+    <p class="a">R. Par <strong>epics</strong> (identité, catalogue, transaction, espaces métiers, IA) puis <strong>user stories</strong> avec critères d&rsquo;acceptation testables ; priorisation par <strong>valeur utilisateur</strong> et <strong>risque technique</strong>.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q50. Quelle politique de branches et d&rsquo;intégration continue suivez-vous ?</p>
+    <p class="a">R. <strong>Git</strong> sur <code>main</code> (ou branches de fonctionnalités si équipe) ; commits atomiques ; possibilité de CI (build + lint) sur push — à confirmer selon votre dépôt distant.</p>
+  </div>
+
+  <h2>13. Déploiement, exploitation, continuité de service</h2>
+
+  <div class="block">
+    <p class="q">Q51. Décrivez un déploiement de référence pour le front et le back.</p>
+    <p class="a">R. Front : <code>vue-cli-service build</code>, fichiers statiques servis par <strong>Nginx</strong> ou hébergeur statique. Back : <code>nest build</code>, process Node supervisé (PM2, systemd), base <strong>MySQL</strong> managée, secrets injectés par l&rsquo;environnement d&rsquo;hébergement.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q52. Comment sécuriseriez-vous les sauvegardes et la reprise après sinistre ?</p>
+    <p class="a">R. Dumps MySQL planifiés, chiffrement au repos, tests de restauration périodiques, et définition d&rsquo;un <strong>RPO/RTO</strong> cible selon l&rsquo;enjeu métier.</p>
+  </div>
+
+  <h2>14. Bilan critique et feuille de route</h2>
+
+  <div class="block">
+    <p class="q">Q53. Quelles limites assumez-vous franchement sur la version soutenue ?</p>
+    <p class="a">R. Exemples : pas de PSP complet, schéma géré par <code>synchronize</code> en dev, images en BLOB (scalabilité à revoir), dépendance à un fournisseur IA externe, monitoring applicatif à renforcer.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q54. Quelle feuille de route sur 6 à 12 mois ?</p>
+    <p class="a">R. Paiement réel, stockage objet pour médias, recherche full-text ou moteur dédié, application mobile, messagerie vendeur-client, promotions, internationalisation complète, observabilité (logs, métriques, traces).</p>
+  </div>
+  <div class="block">
+    <p class="q">Q55. En quoi votre architecture facilite-t-elle la maintenance à moyen terme ?</p>
+    <p class="a">R. Front et back découplés, modules NestJS par domaine, entités et DTO explicites, configuration externalisée, conventions homogènes — ce qui réduit le coût des évolutions pour une petite équipe.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q56. Si vous recommenciez le projet, que feriez-vous différemment dès le premier sprint ?</p>
+    <p class="a">R. Migrations TypeORM versionnées dès le début, jeux de tests e2e sur le parcours commande, maquettage utilisateur plus tôt, et décision explicite sur la stratégie médias (objet vs BLOB) pour éviter une dette technique.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q57. Comment réagiriez-vous si le jury vous demande de justifier un choix technique contesté (ex. images en base) ?</p>
+    <p class="a">R. Exposer le <strong>contexte</strong> (PFE, délai, simplicité de sauvegarde), les <strong>compromis</strong>, puis la <strong>voie d&rsquo;évolution</strong> documentée : c&rsquo;est une réponse de niveau ingénieur, pas une excuse.</p>
+  </div>
+  <div class="block">
+    <p class="q">Q58. Quelle est la proposition de valeur de votre démo par rapport à une solution SaaS clé en main ?</p>
+    <p class="a">R. Maîtrise du code, adaptation aux règles locales (CIN, rôles), traçabilité des choix d&rsquo;architecture, et capacité à étendre précisément les modules (dashboard, IA, suivi vendeurs) sans dépendre d&rsquo;un no-code fermé.</p>
+  </div>
+
+  <footer class="note">
+    <p><strong>Personnalisation :</strong> croisez chaque réponse avec votre démo (écrans, endpoints réellement testés, champs d&rsquo;entités). Les questions Q18, Q24, Q33, Q44 et Q45 appellent une réponse ancrée dans <em>votre</em> code.</p>
+    <p><strong>PDF :</strong> Fichier &rarr; Imprimer &rarr; Enregistrer au format PDF depuis le navigateur, ou Chrome <code>--headless --print-to-pdf</code> sur ce HTML.</p>
+  </footer>
+</body>
+</html>

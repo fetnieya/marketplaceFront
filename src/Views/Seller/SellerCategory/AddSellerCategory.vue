@@ -108,14 +108,10 @@
           }
 
           const payload = {
-            label: this.label,
-            description: this.description,
-            sellerId: seller.id,
-            sellerEmail: seller.email,
-            sellerName: `${seller.firstName || ''} ${seller.lastName || ''}`.trim() || seller.email,
+            label: this.label.trim(),
+            description: this.description.trim(),
           };
 
-          // Endpoint backend à implémenter côté API pour envoyer l'email à l’admin
           const token = localStorage.getItem('authToken');
           await axios.post(`${this.apiBase}/category-requests`, payload, {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -129,8 +125,20 @@
           }, 1200);
         } catch (error) {
           console.error('Error sending category request:', error);
-          this.error =
-            "Erreur lors de l’envoi de la demande. Vérifiez que l’API des demandes de catégorie est bien configurée.";
+          const status = error?.response?.status;
+          const apiMessage = error?.response?.data?.message;
+          const msg = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+          if (status === 401) {
+            this.error = 'Session expirée. Reconnectez-vous et réessayez.';
+          } else if (status === 403) {
+            this.error = msg || 'Seuls les comptes vendeur peuvent envoyer une demande.';
+          } else if (status === 409) {
+            this.error = msg || 'Cette demande existe déjà en attente.';
+          } else {
+            this.error =
+              msg ||
+              "Erreur lors de l’envoi de la demande. Vérifiez votre connexion ou réessayez plus tard.";
+          }
         } finally {
           this.loading = false;
         }

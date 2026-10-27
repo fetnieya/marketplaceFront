@@ -241,12 +241,12 @@ export default {
       this.loading = true;
       
       try {
-        // Préparer le payload avec tous les attributs de l'utilisateur
+        // Préparer le payload avec les champs attendus par le backend (CreateUserDto)
         const payload = {
           firstName: this.newUser.firstName.trim(),
           lastName: this.newUser.lastName.trim(),
           email: this.newUser.email.trim().toLowerCase(),
-          password_create: this.newUser.password, // Utiliser password_create pour la création selon le DTO
+          password: this.newUser.password,
           role: 'client', // Toujours créer un compte client
         };
 

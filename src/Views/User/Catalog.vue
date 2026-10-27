@@ -914,6 +914,12 @@ export default {
     
     async addToCart(product) {
       if (!product?.id) return;
+      const status = String(product.status || '').toLowerCase();
+      const qty = Number(product.quantity ?? 0);
+      if (status !== 'disponible' || qty <= 0) {
+        toast.warning('Produit indisponible (sold out).');
+        return;
+      }
       const snapshot = {
         id: product.id,
         name: product.name,
@@ -929,7 +935,8 @@ export default {
         }
         toast.cart(`« ${product.name} » ajouté au panier`);
       } catch (e) {
-        toast.error('Impossible d\'ajouter au panier. Réessayez.');
+        const apiMessage = e?.response?.data?.message;
+        toast.error(Array.isArray(apiMessage) ? apiMessage[0] : (apiMessage || 'Impossible d\'ajouter au panier. Réessayez.'));
       }
     },
     
